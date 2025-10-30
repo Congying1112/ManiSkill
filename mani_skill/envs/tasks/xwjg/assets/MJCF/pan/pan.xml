@@ -1,0 +1,38 @@
+<mujoco model="pan">
+  <compiler angle="radian" meshdir="." />
+  <default>
+        <geom type="mesh"/>
+        <default class="material-aluminum">
+        <geom density="2700" rgba="0.79216 0.81961 0.93333 1"/>
+        </default>
+        <default class="material-iron">
+        <geom density="7874" rgba="0.3843 0.3569 0.3412 1"/>
+        </default>
+        <default class="material-mixed">
+        <geom rgba="0.7 0.6 0.6 1"/>
+        </default>
+    </default>
+  <asset>
+    <mesh name="liaopan_all" file="assets/liaopan_all.stl" scale="1 1 1"/>
+    <mesh name="pan_5" file="assets/pan_5.stl" scale="1 1 1"/>
+    <mesh name="pan_4" file="assets/pan_4.stl" scale="1 1 1"/>
+    <mesh name="pan_3" file="assets/pan_3.stl" scale="1 1 1"/>
+    <mesh name="pan_2" file="assets/pan_2.stl" scale="1 1 1"/>
+    <mesh name="pan_0" file="assets/pan_0.stl" scale="1 1 1"/>
+    <mesh name="liaopan" file="assets/liaopan.stl" scale="1 1 1"/>
+    <mesh name="pan_1" file="assets/pan_1.stl" scale="1 1 1"/>
+  </asset>
+  <worldbody>
+    <body name="composite_body" pos="0 0 0">
+      <!-- <geom type="mesh" mesh="liaopan_all" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/> -->
+      <geom type="mesh" mesh="pan_5" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="pan_4" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="pan_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="pan_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="pan_0" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="liaopan" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="pan_1" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+        <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+    </body>
+  </worldbody>
+</mujoco>

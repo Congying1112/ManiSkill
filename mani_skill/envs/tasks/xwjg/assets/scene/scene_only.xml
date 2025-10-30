@@ -1,0 +1,275 @@
+<mujoco model="scene">
+    <!-- <option gravity="0.98 0 0" /> -->
+    <statistic center="0 0 0.5" extent="2.0"/>
+	<compiler angle="radian" meshdir="assets" autolimits="true" />
+	<option timestep="0.001" integrator="implicit" iterations="100" />
+
+    <asset>
+        <!--desk related-->
+        <mesh name="desk_left_bottom_305" file="desk_left_bottom_305.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_101_0" file="desk_left_bottom_101_0.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_101_1_ori_50" file="desk_left_bottom_101_1_ori_50.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_106" file="desk_left_bottom_106.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_304" file="desk_left_bottom_304.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_101_3" file="desk_left_bottom_101_3.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_104" file="desk_left_bottom_104.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_105" file="desk_left_bottom_105.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_101_2" file="desk_left_bottom_101_2.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_303" file="desk_left_bottom_303.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_302" file="desk_left_bottom_302.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_102" file="desk_left_bottom_102.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_103" file="desk_left_bottom_103.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_101_1_new_45" file="desk_left_bottom_101_1_new_45.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_301" file="desk_left_bottom_301.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_201" file="desk_left_bottom_201.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_203" file="desk_left_bottom_203.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom_202" file="desk_left_bottom_202.stl" scale="1 1 1"/>
+        <mesh name="desk_left_bottom" file="desk_left_bottom.stl" scale="1 1 1"/>
+
+        <!--pan related-->
+        <mesh name="liaopan_all" file="liaopan_all.stl" scale="1 1 1"/>
+        <mesh name="pan_5" file="pan_5.stl" scale="1 1 1"/>
+        <mesh name="pan_4" file="pan_4.stl" scale="1 1 1"/>
+        <mesh name="pan_3" file="pan_3.stl" scale="1 1 1"/>
+        <mesh name="pan_2" file="pan_2.stl" scale="1 1 1"/>
+        <mesh name="pan_0" file="pan_0.stl" scale="1 1 1"/>
+        <mesh name="liaopan" file="liaopan.stl" scale="1 1 1"/>
+        <mesh name="pan_1" file="pan_1.stl" scale="1 1 1"/>
+
+        <!--stick related-->
+
+        <!--stick holder related-->
+        <mesh name="stick_holder_204_4" file="stick_holder/204_4.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_29" file="stick_holder/207_29.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_206_6" file="stick_holder/206_6.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_15" file="stick_holder/207_15.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_14" file="stick_holder/207_14.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_206_7" file="stick_holder/206_7.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_28" file="stick_holder/207_28.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_204_5" file="stick_holder/204_5.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_201" file="stick_holder/201.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_204_7" file="stick_holder/204_7.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_16" file="stick_holder/207_16.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_206_5" file="stick_holder/206_5.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_206_4" file="stick_holder/206_4.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_17" file="stick_holder/207_17.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_204_6" file="stick_holder/204_6.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_202" file="stick_holder/202.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_204_2" file="stick_holder/204_2.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_13" file="stick_holder/207_13.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_206_1" file="stick_holder/206_1.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_12" file="stick_holder/207_12.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_204_3" file="stick_holder/204_3.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_204_1" file="stick_holder/204_1.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_206_3" file="stick_holder/206_3.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_10" file="stick_holder/207_10.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_11" file="stick_holder/207_11.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_206_2" file="stick_holder/206_2.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_5" file="stick_holder/207_5.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_205_7" file="stick_holder/205_7.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_203_1" file="stick_holder/203_1.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_205_6" file="stick_holder/205_6.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_4" file="stick_holder/207_4.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_6" file="stick_holder/207_6.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_205_4" file="stick_holder/205_4.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_203_2" file="stick_holder/203_2.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_203_3" file="stick_holder/203_3.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_203_10" file="stick_holder/203_10.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_205_5" file="stick_holder/205_5.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_7" file="stick_holder/207_7.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_3" file="stick_holder/207_3.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_205_1" file="stick_holder/205_1.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_203_7" file="stick_holder/203_7.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_203_6" file="stick_holder/203_6.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_2" file="stick_holder/207_2.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_205_2" file="stick_holder/205_2.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_203_4" file="stick_holder/203_4.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_203_5" file="stick_holder/203_5.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_205_3" file="stick_holder/205_3.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_1" file="stick_holder/207_1.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_203_8" file="stick_holder/203_8.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_203_9" file="stick_holder/203_9.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_204_10" file="stick_holder/204_10.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_9" file="stick_holder/207_9.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_8" file="stick_holder/207_8.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_20" file="stick_holder/207_20.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_21" file="stick_holder/207_21.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_23" file="stick_holder/207_23.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_22" file="stick_holder/207_22.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_26" file="stick_holder/207_26.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_27" file="stick_holder/207_27.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_204_8" file="stick_holder/204_8.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_25" file="stick_holder/207_25.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_19" file="stick_holder/207_19.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_18" file="stick_holder/207_18.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_207_24" file="stick_holder/207_24.stl" scale="1 1 1"/>
+        <mesh name="stick_holder_204_9" file="stick_holder/204_9.stl" scale="1 1 1"/>
+
+        <mesh name="stick"  scale="1 1 1" file="stick.stl"/>
+    </asset>
+
+    <default>
+        <geom type="mesh"/>
+		<default class="material-aluminum">
+			<geom density="2700" rgba="0.79216 0.81961 0.93333 1"/>
+            <default class="wall">
+                <geom type="box" friction=".1"/>
+            </default>
+		</default>
+		<default class="material-iron">
+			<geom density="7874" rgba="0.3843 0.3569 0.3412 1"/>
+		</default>
+		<default class="material-mixed">
+			<geom rgba="0.7 0.6 0.6 1"/>
+		</default>
+    </default>
+
+    <worldbody>
+        <!--desk related-->
+        <body name="workdesk_anchor" pos="0 0.7 0.91" euler="0 0 0">
+            <geom type="mesh" mesh="desk_left_bottom_305" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_101_0" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_101_1_ori_50" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_106" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_304" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_101_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_104" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_105" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_101_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_303" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_302" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_102" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_103" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_101_1_new_45" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_301" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_201" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_203" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom_202" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="desk_left_bottom" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+        </body>
+
+        <!--pan related-->
+        <body name="pan_anchor" pos="0 0.7 .9" euler="0 0 0">
+            <geom type="mesh" mesh="pan_5" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="pan_4" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="pan_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="pan_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="pan_0" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="liaopan" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <geom type="mesh" mesh="pan_1" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+            <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+        </body>
+
+        <!-- <replicate count="3" offset=".1 0 0">
+            <replicate count="4" offset="0 .04 0">
+                <replicate count="2" offset="0 0 .01">
+                <body pos="-.9 .15 .72" euler="0 0 0">
+                    <joint type="free" />
+                    <attach prefix="stick_holder1" model="stick_holder"/>
+                </body>
+                </replicate>
+            </replicate>
+        </replicate> -->
+        <!-- <replicate count="4" offset="0 .04 0">
+            <replicate count="2" offset="0 0 .01">
+            <body pos="-0.8 -.08 -0.195" euler="0 0 0">
+                <joint type="free" />
+                <geom type="mesh" mesh="stick" class="material-iron" solref="0.02 1" solimp="0.8 0.8 0.001"/>
+                <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+            </body>
+            </replicate>
+        </replicate> -->
+
+        <!-- <body name="stick_holder" pos="-.9 .15 .72" euler="0 0 0">
+            <joint type="free" />
+            <attach prefix="stick_holder1" model="stick_holder"/>
+        </body> -->
+        <body name="stick" pos="-0.8 -.08 -0.195" euler="0 0 0">
+            <!-- <joint type="free" /> -->
+            <geom type="mesh" mesh="stick" class="material-iron" solref="0.02 1" solimp="0.8 0.8 0.001"/>
+            <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+        </body>
+
+        <!-- <body name="stick_holder_target" pos="-.1775 .7285 0.91" euler="0 0 3.14">
+            <joint type="free" />
+            <attach prefix="stick_holder" model="stick_holder" />
+        </body> -->
+
+        <body name="stick_holder_target" pos="-.1775 .7285 0.91" euler="0 0 3.14">
+            <!-- <joint type="free" /> -->
+            <geom type="mesh" mesh="stick_holder_204_4" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_29" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_206_6" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_15" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_14" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_206_7" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_28" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_204_5" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_201" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_204_7" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_16" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_206_5" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_206_4" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_17" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_204_6" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_202" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_204_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_13" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_206_1" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_12" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_204_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_204_1" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_206_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_10" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_11" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_206_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_5" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_205_7" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_203_1" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_205_6" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_4" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_6" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_205_4" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_203_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_203_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_203_10" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_205_5" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_7" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_205_1" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_203_7" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_203_6" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_205_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_203_4" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_203_5" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_205_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_1" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_203_8" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_203_9" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_204_10" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_9" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_8" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_20" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_21" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_23" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_22" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_26" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_27" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_204_8" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_25" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_19" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_18" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_207_24" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <geom type="mesh" mesh="stick_holder_204_9" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+            <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+        </body>
+        <body name="stick_target" pos=".0 .7 -.005" euler="0 0 0">
+            <!-- <joint type="free" /> -->
+            <geom type="mesh" mesh="stick" class="material-iron" solref="0.02 1" solimp="0.8 0.8 0.001"/>
+            <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+        </body>
+
+    </worldbody>
+</mujoco>

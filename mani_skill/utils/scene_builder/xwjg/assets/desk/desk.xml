@@ -1,0 +1,60 @@
+<mujoco model="desk">
+  <compiler angle="radian" meshdir="." />
+  <default>
+        <geom type="mesh"/>
+        <default class="material-aluminum">
+        <geom density="2700" rgba="0.79216 0.81961 0.93333 1"/>
+        </default>
+        <default class="material-iron">
+        <geom density="7874" rgba="0.3843 0.3569 0.3412 1"/>
+        </default>
+        <default class="material-mixed">
+        <geom rgba="0.7 0.6 0.6 1"/>
+        </default>
+    </default>
+  <asset>
+    <mesh name="desk_left_bottom_305" file="assets/desk_left_bottom_305.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_101_0" file="assets/desk_left_bottom_101_0.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_101_1_ori_50" file="assets/desk_left_bottom_101_1_ori_50.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_106" file="assets/desk_left_bottom_106.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_304" file="assets/desk_left_bottom_304.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_101_3" file="assets/desk_left_bottom_101_3.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_104" file="assets/desk_left_bottom_104.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_105" file="assets/desk_left_bottom_105.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_101_2" file="assets/desk_left_bottom_101_2.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_303" file="assets/desk_left_bottom_303.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_302" file="assets/desk_left_bottom_302.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_102" file="assets/desk_left_bottom_102.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_103" file="assets/desk_left_bottom_103.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_101_1_new_45" file="assets/desk_left_bottom_101_1_new_45.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_301" file="assets/desk_left_bottom_301.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_201" file="assets/desk_left_bottom_201.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_203" file="assets/desk_left_bottom_203.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom_202" file="assets/desk_left_bottom_202.stl" scale="1 1 1"/>
+    <mesh name="desk_left_bottom" file="assets/desk_left_bottom.stl" scale="1 1 1"/>
+  </asset>
+  <worldbody>
+    <body name="composite_body" pos="0 0 0">
+      <geom type="mesh" mesh="desk_left_bottom_305" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_101_0" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_101_1_ori_50" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_106" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_304" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_101_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_104" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_105" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_101_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_303" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_302" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_102" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_103" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_101_1_new_45" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_301" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_201" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_203" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom_202" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+      <geom type="mesh" mesh="desk_left_bottom" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-aluminum"/>
+        <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+    </body>
+  </worldbody>
+</mujoco>

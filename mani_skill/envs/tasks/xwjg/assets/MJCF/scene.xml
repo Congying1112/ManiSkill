@@ -1,0 +1,95 @@
+<mujoco model="scene">
+    <!-- <option gravity="0.98 0 0" /> -->
+    <statistic center="0 0 0.5" extent="2.0"/>
+	<compiler angle="radian" meshdir="assets" autolimits="true" />
+	<option timestep="0.001" integrator="implicit" iterations="100" />
+
+    <visual>
+        <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0" />
+        <rgba haze="0.15 0.25 0.35 1" />
+        <global azimuth="160" elevation="-20" />
+    </visual>
+
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512"
+            height="3072" />
+        <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4"
+            rgb2="0.1 0.2 0.3"
+            markrgb="0.8 0.8 0.8" width="300" height="300" />
+        <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5"
+            reflectance="0.2" />
+
+        <model name="rj2502" file="rj2502/rj2502.xml" />
+        <!-- <model name="g1" file="g1/g1_23dof_upper.xml" /> -->
+
+        <model name="stick_holder" file="stick_holder/stick_holder.xml" />
+        <model name="pan" file="pan/pan.xml" />
+        <model name="desk" file="desk/desk.xml" />
+        <mesh name="stick"  scale="1 1 1" file="stick.stl"/>
+    </asset>
+
+    <default>
+        <geom type="mesh"/>
+		<default class="material-aluminum">
+			<geom density="2700" rgba="0.79216 0.81961 0.93333 1"/>
+            <default class="wall">
+                <geom type="box" friction=".1"/>
+            </default>
+		</default>
+		<default class="material-iron">
+			<geom density="7874" rgba="0.3843 0.3569 0.3412 1"/>
+		</default>
+		<default class="material-mixed">
+			<geom rgba="0.7 0.6 0.6 1"/>
+		</default>
+    </default>
+
+    <worldbody>
+        <light pos="0 0 3.5" dir="0 0 -1" directional="true" />
+        <geom name="floor" size="0 0 0.05" pos="0 0 0" type="plane" material="groundplane" />
+
+        <body name="robot_anchor" pos="0 0 0" euler="0 0 3.14">
+            <attach prefix="rj2502_" model="rj2502" />
+        </body>
+        <!-- <body name="robot_anchor" pos="0 0.2 0" euler="0 0 90">
+            <attach prefix="robot" model="g1" />
+            <joint name="floating_base_joint" type="free" limited="false" actuatorfrclimited="false" />
+        </body> -->
+         <body name="workdesk_anchor" pos="0 0.7 0.91" euler="0 0 0">
+            <attach prefix="desk" model="desk" />
+        </body>
+        <body name="pan_anchor" pos="0 0.7 .9" euler="0 0 0">
+            <attach prefix="pan" model="pan" />
+        </body>
+
+        <replicate count="3" offset=".1 0 0">
+            <replicate count="4" offset="0 .04 0">
+                <replicate count="2" offset="0 0 .01">
+                <body pos="-.9 .15 .72" euler="0 0 0">
+                    <joint type="free" />
+                    <attach prefix="stick_holder1" model="stick_holder"/>
+                </body>
+                </replicate>
+            </replicate>
+        </replicate>
+        <replicate count="4" offset="0 .04 0">
+            <replicate count="2" offset="0 0 .01">
+            <body pos="-0.8 -.08 -0.195" euler="0 0 0">
+                <joint type="free" />
+                <geom type="mesh" mesh="stick" class="material-iron" solref="0.02 1" solimp="0.8 0.8 0.001"/>
+                <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+            </body>
+            </replicate>
+        </replicate>
+
+        <body pos="-.1775 .7285 0.91" euler="0 0 3.14">
+            <joint type="free" />
+            <attach prefix="stick_holder" model="stick_holder" />
+        </body>
+        <body pos=".0 .7 -.005" euler="0 0 0">
+            <joint type="free" />
+            <geom type="mesh" mesh="stick" class="material-iron" solref="0.02 1" solimp="0.8 0.8 0.001"/>
+            <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+        </body>
+    </worldbody>
+</mujoco>

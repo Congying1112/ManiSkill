@@ -1,0 +1,152 @@
+<mujoco model="stick_holder">
+  <compiler angle="radian" meshdir="." />
+  <default>
+        <geom type="mesh"/>
+        <default class="material-aluminum">
+        <geom density="2700" rgba="0.79216 0.81961 0.93333 1"/>
+        </default>
+        <default class="material-iron">
+        <geom density="7874" rgba="0.3843 0.3569 0.3412 1"/>
+        </default>
+        <default class="material-mixed">
+        <geom rgba="0.7 0.6 0.6 1"/>
+        </default>
+    </default>
+  <asset>
+    <mesh name="204_4" file="assets/204_4.stl" scale="1 1 1"/>
+    <mesh name="207_29" file="assets/207_29.stl" scale="1 1 1"/>
+    <mesh name="206_6" file="assets/206_6.stl" scale="1 1 1"/>
+    <mesh name="207_15" file="assets/207_15.stl" scale="1 1 1"/>
+    <mesh name="207_14" file="assets/207_14.stl" scale="1 1 1"/>
+    <mesh name="206_7" file="assets/206_7.stl" scale="1 1 1"/>
+    <mesh name="207_28" file="assets/207_28.stl" scale="1 1 1"/>
+    <mesh name="204_5" file="assets/204_5.stl" scale="1 1 1"/>
+    <mesh name="201" file="assets/201.stl" scale="1 1 1"/>
+    <mesh name="204_7" file="assets/204_7.stl" scale="1 1 1"/>
+    <mesh name="207_16" file="assets/207_16.stl" scale="1 1 1"/>
+    <mesh name="206_5" file="assets/206_5.stl" scale="1 1 1"/>
+    <mesh name="206_4" file="assets/206_4.stl" scale="1 1 1"/>
+    <mesh name="207_17" file="assets/207_17.stl" scale="1 1 1"/>
+    <mesh name="204_6" file="assets/204_6.stl" scale="1 1 1"/>
+    <mesh name="202" file="assets/202.stl" scale="1 1 1"/>
+    <mesh name="204_2" file="assets/204_2.stl" scale="1 1 1"/>
+    <mesh name="207_13" file="assets/207_13.stl" scale="1 1 1"/>
+    <mesh name="206_1" file="assets/206_1.stl" scale="1 1 1"/>
+    <mesh name="207_12" file="assets/207_12.stl" scale="1 1 1"/>
+    <mesh name="204_3" file="assets/204_3.stl" scale="1 1 1"/>
+    <mesh name="204_1" file="assets/204_1.stl" scale="1 1 1"/>
+    <mesh name="206_3" file="assets/206_3.stl" scale="1 1 1"/>
+    <mesh name="207_10" file="assets/207_10.stl" scale="1 1 1"/>
+    <mesh name="207_11" file="assets/207_11.stl" scale="1 1 1"/>
+    <mesh name="206_2" file="assets/206_2.stl" scale="1 1 1"/>
+    <mesh name="207_5" file="assets/207_5.stl" scale="1 1 1"/>
+    <mesh name="205_7" file="assets/205_7.stl" scale="1 1 1"/>
+    <mesh name="203_1" file="assets/203_1.stl" scale="1 1 1"/>
+    <mesh name="205_6" file="assets/205_6.stl" scale="1 1 1"/>
+    <mesh name="207_4" file="assets/207_4.stl" scale="1 1 1"/>
+    <mesh name="207_6" file="assets/207_6.stl" scale="1 1 1"/>
+    <mesh name="205_4" file="assets/205_4.stl" scale="1 1 1"/>
+    <mesh name="203_2" file="assets/203_2.stl" scale="1 1 1"/>
+    <mesh name="203_3" file="assets/203_3.stl" scale="1 1 1"/>
+    <mesh name="203_10" file="assets/203_10.stl" scale="1 1 1"/>
+    <mesh name="205_5" file="assets/205_5.stl" scale="1 1 1"/>
+    <mesh name="207_7" file="assets/207_7.stl" scale="1 1 1"/>
+    <mesh name="207_3" file="assets/207_3.stl" scale="1 1 1"/>
+    <mesh name="205_1" file="assets/205_1.stl" scale="1 1 1"/>
+    <mesh name="203_7" file="assets/203_7.stl" scale="1 1 1"/>
+    <mesh name="203_6" file="assets/203_6.stl" scale="1 1 1"/>
+    <mesh name="207_2" file="assets/207_2.stl" scale="1 1 1"/>
+    <mesh name="205_2" file="assets/205_2.stl" scale="1 1 1"/>
+    <mesh name="203_4" file="assets/203_4.stl" scale="1 1 1"/>
+    <mesh name="203_5" file="assets/203_5.stl" scale="1 1 1"/>
+    <mesh name="205_3" file="assets/205_3.stl" scale="1 1 1"/>
+    <mesh name="207_1" file="assets/207_1.stl" scale="1 1 1"/>
+    <mesh name="203_8" file="assets/203_8.stl" scale="1 1 1"/>
+    <mesh name="203_9" file="assets/203_9.stl" scale="1 1 1"/>
+    <mesh name="204_10" file="assets/204_10.stl" scale="1 1 1"/>
+    <mesh name="207_9" file="assets/207_9.stl" scale="1 1 1"/>
+    <mesh name="207_8" file="assets/207_8.stl" scale="1 1 1"/>
+    <mesh name="207_20" file="assets/207_20.stl" scale="1 1 1"/>
+    <mesh name="207_21" file="assets/207_21.stl" scale="1 1 1"/>
+    <mesh name="207_23" file="assets/207_23.stl" scale="1 1 1"/>
+    <mesh name="207_22" file="assets/207_22.stl" scale="1 1 1"/>
+    <mesh name="207_26" file="assets/207_26.stl" scale="1 1 1"/>
+    <mesh name="207_27" file="assets/207_27.stl" scale="1 1 1"/>
+    <mesh name="204_8" file="assets/204_8.stl" scale="1 1 1"/>
+    <mesh name="207_25" file="assets/207_25.stl" scale="1 1 1"/>
+    <mesh name="207_19" file="assets/207_19.stl" scale="1 1 1"/>
+    <mesh name="207_18" file="assets/207_18.stl" scale="1 1 1"/>
+    <mesh name="207_24" file="assets/207_24.stl" scale="1 1 1"/>
+    <mesh name="204_9" file="assets/204_9.stl" scale="1 1 1"/>
+  </asset>
+  <worldbody>
+    <body name="composite_body" pos="0 0 0">
+      <geom type="mesh" mesh="204_4" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_29" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="206_6" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_15" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_14" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="206_7" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_28" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="204_5" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="201" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="204_7" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_16" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="206_5" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="206_4" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_17" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="204_6" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="202" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="204_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_13" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="206_1" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_12" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="204_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="204_1" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="206_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_10" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_11" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="206_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_5" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="205_7" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="203_1" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="205_6" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_4" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_6" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="205_4" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="203_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="203_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="203_10" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="205_5" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_7" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="205_1" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="203_7" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="203_6" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="205_2" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="203_4" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="203_5" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="205_3" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_1" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="203_8" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="203_9" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="204_10" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_9" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_8" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_20" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_21" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_23" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_22" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_26" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_27" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="204_8" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_25" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_19" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_18" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="207_24" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <geom type="mesh" mesh="204_9" pos="0 0 0" quat="1 0 0 0" solref="0.02 1" solimp="0.8 0.8 0.001" class="material-iron"/>
+      <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+    </body>
+  </worldbody>
+</mujoco>

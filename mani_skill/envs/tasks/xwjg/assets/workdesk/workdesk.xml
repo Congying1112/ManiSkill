@@ -1,0 +1,11 @@
+<mujoco model="workdesk">
+  <compiler angle="radian"/>
+
+  <asset>
+    <mesh name="base_link_desk"  scale="1.0 1.0 1.0" file="base_link.STL"/>
+  </asset>
+
+  <worldbody>
+    <geom type="mesh" rgba="0.79216 0.81961 0.93333 1" mesh="base_link_desk"/>
+  </worldbody>
+</mujoco>

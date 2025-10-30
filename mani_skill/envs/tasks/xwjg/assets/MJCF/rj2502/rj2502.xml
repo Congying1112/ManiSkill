@@ -1,0 +1,370 @@
+<mujoco model="rj2502">
+	<compiler angle="radian" meshdir="assets" autolimits="true" />
+	<option timestep="0.001" integrator="implicit" iterations="100" />
+
+	<default>
+		<default class="rj2502">
+			<joint damping="2.5" frictionloss="0.15" armature="0.005" actuatorfrcrange="-88 88" />
+			<position kp="35" />
+			<default class="visual">
+				<!-- <geom type="mesh" contype="0" conaffinity="0" group="2" /> -->
+			</default>
+			<default class="collision">
+				<geom group="3" />
+			</default>
+		</default>
+		<!-- geom related classes -->
+		<geom type="mesh" contype="0" conaffinity="0" group="2" />
+		<default class="material-aluminum">
+			<geom density="2700" rgba="0.79216 0.81961 0.93333 1"/>
+		</default>
+		<default class="material-iron">
+			<geom density="7874" rgba="0.3843 0.3569 0.3412 1"/>
+		</default>
+		<default class="material-mixed">
+			<geom rgba="0.7 0.6 0.6 1"/>
+		</default>
+
+		<!-- joint&actutor related classes -->
+			<!-- armature = 转子转动惯量0.0001 * (减速比)^2 -->
+		<!-- <position kp="50" kv="5"/> -->
+		<joint pos="0 0 0" />
+		<default class="body_joint">
+			<!-- PH-25电机参数 及 使用PH-25关节电机参数 -->
+			<default class="PH-25-81">
+				<joint type="hinge"  damping="1.2" frictionloss="0.02" armature="0.6561"/>
+				<position kp="350" kv="200" forcerange="-16900 16900" />
+				<default class="body_joint2"> 
+					<joint range="0 0.707108"/>
+					<position ctrlrange="0 0.707108" />
+				</default>
+				<default class="body_joint4"> 
+					<joint range="-1.414 1.414"/>
+					<position ctrlrange="-1.414 1.414"/>
+				</default>
+			</default>
+			<!-- PH-20电机参数 及 使用PH-20关节电机参数 -->
+			<default class="PH-20-121">
+				<joint type="hinge" stiffness="23" damping="20" frictionloss="0.18" armature="1.46" />
+				<position kp="350" kv="200" forcerange="-1080 1080" />
+				<default class="arm_joint">
+					<joint range="-2.9671 2.9671" />
+					<position ctrlrange="-2.9671 2.9671" />
+					<default class="arml_joint9">
+						<joint axis="-1 0 0" />
+					</default>
+					<default class="armr_joint9">
+						<joint axis="1 0 0" />
+					</default>
+				</default>
+			</default>
+			<!-- PH-17电机参数 及 使用PH-17关节电机参数 -->
+			<default class="PH-17-51">
+				<joint type="hinge" stiffness="10.7" damping="1.6" frictionloss="0.17" armature="0.2601" />
+				<!-- <position kp="14.5" kv="0.5" forcerange="-42 42"/> -->
+				<position kp="350" kv="200" forcerange="-420 420"/>
+				<default class="arm_joint1">
+					<joint range="-3.1416 0.1745" />
+					<position ctrlrange="-3.1416 0.1745" />
+					<default class="arml_joint1">
+						<joint axis="0 0 -1" />
+					</default>
+					<default class="armr_joint1">
+						<joint axis="0 0 1" />
+					</default>
+				</default>
+				<default class="arm_joint2">
+					<joint range="-1.1345 1.1345" />
+					<position ctrlrange="-1.1345 1.1345" />
+					<default class="arml_joint2">
+						<joint axis="0 1 0" />
+					</default>
+					<default class="armr_joint2">
+						<joint axis="0 -1 0" />
+					</default>
+				</default>
+				<default class="arm_joint3">
+					<joint range="-0.1745 1.9199" />
+					<position ctrlrange="-0.1745 1.9199" />
+					<default class="arml_joint3">
+						<joint axis="-1 0 0" />
+					</default>
+					<default class="armr_joint3">
+						<joint axis="-1 0 0" />
+					</default>
+				</default>
+			</default>
+			<!-- PH-14电机参数 及 使用PH-14关节电机参数 -->
+			<default class="PH-14-51">
+				<joint type="hinge" stiffness="4.6" damping="0.8" frictionloss="0.15" armature="0.2601" />
+				<position kp="350" kv="200" forcerange="-230 230"/>
+				<default class="arm_joint4">
+					<joint range="-1.1345 1.1345" />
+					<position ctrlrange="-1.1345 1.1345" />
+					<default class="arml_joint4">
+						<joint axis="0 1 0" />
+					</default>
+					<default class="armr_joint4">
+						<joint axis="0 -1 0" />
+					</default>
+				</default>
+			</default>
+			<!-- PH-11电机参数 及 使用PH-11关节电机参数 -->
+			<default class="PH-11-101">
+				<joint type="hinge" stiffness="2.43" damping="0.8" frictionloss="0.15" armature="1.0201" />
+				<position kp="350" kv="200" forcerange="-340 340"/>
+				<default class="arm_joint5">
+					<joint range="-1.5707 1.5707" />
+					<position ctrlrange="-1.5707 1.5707" />
+					<default class="arml_joint5">
+						<joint axis="-1 0 0" />
+					</default>
+					<default class="armr_joint5">
+						<joint axis="-1 0 0" />
+					</default>
+				</default>
+			</default>		
+		</default>
+		<!-- 夹爪 -->
+		<default class="EPG40">
+			<joint type="slide" damping="0.05" frictionloss="0.02" armature="0.01" />
+			<position kp="350" kv="200" />
+			<default class="hand_joint">
+				<joint range="0 0.025" />
+				<position ctrlrange="0 0.025" />
+				<default class="handr_joint1">
+					<joint axis="-1 0 0" />
+				</default>
+				<default class="handr_joint2">
+					<joint axis="1 0 0" />
+				</default>
+				<default class="handl_joint1">
+					<joint axis="1 0 0" />
+				</default>
+				<default class="handl_joint2">
+					<joint axis="-1 0 0" />
+				</default>
+			</default>
+		</default>
+		<!-- 宇树电机参数 -->
+		<default class="yy1">
+			<joint damping="0.05" frictionloss="0.2" armature="0.01" />
+		</default>
+		<!-- SO101电机参数 -->
+		<default class="yy2">
+			<geom contype="0" conaffinity="0" />
+			<joint damping="0.60" frictionloss="0.052" armature="0.028" />
+			<!-- For lerobot this are not exactly the motor params as the Kp and Kd not map 1-to-1
+			thus motor idendification with lerobot Kp=16 and Kd=32 should actually be done -->
+			<position kp="17.8" />
+		</default>
+	</default>
+	<asset>
+		<mesh name="base_link" file="base_link.STL" />
+		<mesh name="body_Link1" file="body_Link1.STL" />
+		<mesh name="body_Link2" file="body_Link2.STL" />
+		<mesh name="body_Link3" file="body_Link3.STL" />
+		<mesh name="body_Link4" file="body_Link4.STL" />
+		<mesh name="armr_Link" file="armr_Link.STL" />
+		<mesh name="armr_Link1" file="armr_Link1.STL" />
+		<mesh name="armr_Link2" file="armr_Link2.STL" />
+		<mesh name="armr_Link3" file="armr_Link3.STL" />
+		<mesh name="armr_Link4" file="armr_Link4.STL" />
+		<mesh name="armr_Link5" file="armr_Link5.STL" />
+		<mesh name="handr_Link1" file="handr_Link1.STL" />
+		<mesh name="handr_Link2" file="handr_Link2.STL" />
+		<mesh name="arml_Link" file="arml_Link.STL" />
+		<mesh name="arml_Link1" file="arml_Link1.STL" />
+		<mesh name="arml_Link2" file="arml_Link2.STL" />
+		<mesh name="arml_Link3" file="arml_Link3.STL" />
+		<mesh name="arml_Link4" file="arml_Link4.STL" />
+		<mesh name="arml_Link5" file="arml_Link5.STL" />
+		<mesh name="handl_Link1" file="handl_Link1.STL" />
+		<mesh name="handl_Link2" file="handl_Link2.STL" />
+	</asset>
+
+	<worldbody>
+		<body name="base" pos="0 0 0">
+			<geom mesh="base_link" class="material-mixed" mass="18.582" pos="0 0 0" quat="0.707105 0.707108 0 0" />
+			<geom mesh="body_Link1" class="material-mixed" mass="1.314" pos="0 -0.12151 0.689" quat="0.707105 0.707108 0 0" />
+			<!-- <inertial pos="0.0137179 -5.19711e-05 0.0334843" mass="19.896"
+				fullinertia="0.000114686 0.000136117 0.000130364 -4.59787e-07 4.97151e-06 9.75275e-08" /> -->
+			<body name="body_Link2" pos="0.0685 -0.12151 0.8195" quat="0.707105 0.707108 0 0">
+				<geom mesh="body_Link2" class="material-aluminum" />
+				<!-- <inertial pos="-0.0307604 -1.66727e-05 -0.0252713" mass="0.100006"
+					fullinertia="8.3759e-05 8.10403e-05 2.39783e-05 7.55525e-08 -1.16342e-06 1.54663e-07" /> -->
+				<!-- <joint name="body_joint2"  axis="1 0 0" class="body_joint2" /> -->
+				<body name="body_Link3" pos="-0.0685 0 -0.0675">
+					<geom mesh="body_Link3"  class="material-aluminum"/>
+					<!-- <inertial pos="2.3435e-05 0.079526 0.06751"
+						quat="0.704953 -6.23016e-07 6.19238e-07 0.709254" mass="0.53424"
+						diaginertia="0.000946903 0.000878357 0.00081954" /> -->
+					<!-- <joint name="body_joint3"  axis="0 0 -1" range="-0.1745 1.1345" class="body_joint3" /> -->
+					<body name="body_Link4" pos="0 0.1935 0.0675">
+						<geom mesh="body_Link4" class="material-mixed" mass="3.8575"/>
+						<!-- <inertial pos="-2.2988e-05 0.11257 -0.0098981" mass="3.8575"
+							quat="0.500972 0.495254 -0.499222 0.504509"
+							diaginertia="0.0167242 0.0155389 0.00740637" /> -->
+						<joint name="body_joint4"  axis="0 -1 0"  class="body_joint4" />
+						<body name="armr_Link" pos="-0.1085 0.1275 0">
+							<geom mesh="armr_Link"  class="material-aluminum" />
+							<!-- <inertial pos="-0.088271 -0.00036216 -0.0029443"
+								quat="5.18242e-05 0.661585 9.35338e-05 0.74987" mass="0.238"
+								diaginertia="0.000868648 0.00070451 0.000417942" /> -->
+							<joint name="armr_joint9" class="armr_joint9"/>
+							<body name="armr_Link1" pos="-0.10794 0 -0.039999">
+								<geom mesh="armr_Link1"  class="material-aluminum"/>
+								<!-- <inertial pos="-0.002025 -0.057677 0.028331"
+									quat="0.547382 0.454705 -0.399113 0.578209" mass="0.62796"
+									diaginertia="0.00183886 0.00127411 0.00104583" /> -->
+								<joint name="armr_joint1" class="armr_joint1" />
+								<body name="armr_Link2" pos="-6.2625e-05 -0.1255 0.0415">
+									<geom mesh="armr_Link2"  class="material-aluminum"/>
+									<!-- <inertial pos="-0.0045947 -0.11257 -2.6233e-05"
+										quat="0.705369 0.707298 -0.029074 -0.0365868" mass="0.82669"
+										diaginertia="0.00152797 0.0014682 0.000822969" /> -->
+									<joint name="armr_joint2"   class="armr_joint2" />
+									<body name="armr_Link3" pos="-0.05 -0.1805 0">
+										<geom mesh="armr_Link3"  class="material-aluminum"/>
+										<!-- <inertial pos="0.030352 -0.026991 -0.0026078"
+											quat="0.696888 0.710831 0.0594707 0.074369"
+											mass="0.59926"
+											diaginertia="0.00129957 0.000941585 0.000646397" /> -->
+										<joint name="armr_joint3" class="armr_joint3" />
+										<body name="armr_Link4" pos="0.050001 -0.092358 0.00049537">
+											<geom mesh="armr_Link4"  class="material-aluminum"/>
+											<!-- <inertial pos="-0.0018548 -0.087481 6.9297e-05"
+												quat="0.525362 0.472481 -0.525806 0.473587"
+												mass="0.59684"
+												diaginertia="0.00089175 0.000884091 0.000474528" /> -->
+											<joint name="armr_joint4"  class="armr_joint4" />
+											<body name="armr_Link5" pos="-0.043501 -0.16 0">
+												<geom mesh="armr_Link5"  class="material-aluminum"/>
+												<!-- <inertial pos="0.042096 -0.086394 -0.0032579"
+													quat="-0.0146869 0.707129 -0.0118299 0.706833"
+													mass="0.44092"
+													diaginertia="0.00029429 0.000251691 0.000217709" /> -->
+												<joint name="armr_joint5"   class="armr_joint5" />
+												<body name="handr_Link1"
+													pos="0.064 -0.17204 -0.015493"
+													quat="0.999822 0.0188424 0 0">
+													<geom mesh="handr_Link1"  class="material-iron" />
+													<!-- <inertial pos="-0.0010285 -0.0014487 0.0037309"
+														quat="0.526717 0.4529 -0.458287 0.554457"
+														mass="0.0068162"
+														diaginertia="1.34491e-06 8.63514e-07 6.24543e-07" /> -->
+													<joint name="handr_joint1" class="handr_joint1" />
+												</body>
+												<body name="handr_Link2"
+													pos="0.023 -0.17272 0.0024942"
+													quat="0.999822 0.0188424 0 0">
+													<geom mesh="handr_Link2"  class="material-iron" />
+													<!-- <inertial pos="0.0010285 -0.0014487 -0.0037309"
+														quat="0.4529 0.526717 -0.554457 0.458287"
+														mass="0.0068162"
+														diaginertia="1.34491e-06 8.63514e-07 6.24543e-07" /> -->
+													<joint name="handr_joint2" class="handr_joint2" />
+												</body>
+											</body>
+										</body>
+									</body>
+								</body>
+							</body>
+						</body>
+						<body name="arml_Link" pos="0.1085 0.1275 0">
+							<geom mesh="arml_Link"  class="material-aluminum"/>
+							<!-- <inertial pos="0.088271 -0.00036216 0.0029443" quat="-5.18242e-05 0.661585 -9.35338e-05 0.74987" mass="0.238" diaginertia="0.000868648 0.00070451 0.000417942" /> -->
+							<joint name="arml_joint9" class="arml_joint9" />
+							<body name="arml_Link1" pos="0.10794 0 0.039999">
+								<geom mesh="arml_Link1"  class="material-aluminum"/>
+								<!-- <inertial pos="0.002025 -0.057677 -0.028331" quat="0.454705 0.547381 -0.578209 0.399113" mass="0.62796" diaginertia="0.00183886 0.00127411 0.00104583" /> -->
+								<joint name="arml_joint1" class="arml_joint1" />
+								<body name="arml_Link2" pos="6.2625e-05 -0.1255 -0.0415">
+									<geom mesh="arml_Link2"  class="material-aluminum"/>
+									<!-- <inertial pos="0.0045947 -0.11257 2.6233e-05" quat="0.707298 0.705369 0.0365868 0.029074" mass="0.82669" diaginertia="0.00152797 0.0014682 0.000822969" /> -->
+									<joint name="arml_joint2" class="arml_joint2" />
+									<body name="arml_Link3" pos="0.05 -0.1805 0">
+										<geom mesh="arml_Link3"  class="material-aluminum" />
+										<!-- <inertial pos="-0.030352 -0.026991 0.0026078"
+											quat="0.710831 0.696888 -0.074369 -0.0594707"
+											mass="0.59926"
+											diaginertia="0.00129957 0.000941585 0.000646397" /> -->
+										<joint name="arml_joint3" class="arml_joint3" />
+										<body name="arml_Link4" pos="-0.050001 -0.092358 -0.00049537">
+											<geom mesh="arml_Link4"  class="material-aluminum"/>
+											<!-- <inertial pos="0.0018548 -0.087481 -6.9297e-05"
+												quat="0.472481 0.525362 -0.473587 0.525806"
+												mass="0.59684"
+												diaginertia="0.00089175 0.000884091 0.000474528" /> -->
+											<joint name="arml_joint4"  class="arml_joint4" />
+											<body name="arml_Link5" pos="0.043501 -0.16 0">
+												<geom mesh="arml_Link5"  class="material-aluminum"/>
+												<!-- <inertial pos="-0.042096 -0.086394 0.0032579" >
+													quat="0.0146869 0.707129 0.0118299 0.706833"·
+													mass="0.44092"
+													diaginertia="0.00029429 0.000251691 0.000217709" /-->
+												<joint name="arml_joint5" class="arml_joint5" />
+												<body name="handl_Link1" pos="-0.064 -0.17204 0.015493" quat="0.999822 -0.0188424 0 0">
+													<geom mesh="handl_Link1"  class="material-iron" />
+													<!-- <inertial pos="0.0010285 -0.0014487 -0.0037309"
+														quat="0.4529 0.526717 -0.554457 0.458287"
+														mass="0.0068162"
+														diaginertia="1.34491e-06 8.63514e-07 6.24543e-07" /> -->
+													<joint name="handl_joint1" class="handl_joint1" />
+												</body>
+												<body name="handl_Link2" pos="-0.023 -0.17272 -0.0024942" quat="0.999822 -0.0188424 0 0">
+													<geom mesh="handl_Link2"  class="material-iron" />
+													<!-- <inertial pos="-0.0010285 -0.0014487 0.0037309"
+														quat="0.526717 0.4529 -0.458287 0.554457"
+														mass="0.0068162"
+														diaginertia="1.34491e-06 8.63514e-07 6.24543e-07" /> -->
+													<joint name="handl_joint2" class="handl_joint2" />
+												</body>
+											</body>
+										</body>
+									</body>
+								</body>
+							</body>
+						</body>
+					</body>
+				</body>
+			</body>
+		</body>
+	</worldbody>
+	<actuator>
+		<!-- <position class="body_joint2" name="body2" joint="body_joint2" /> -->
+		<!-- <position class="PH-25-81" name="body3" joint="body_joint3" forcerange="-3350 3350" ctrlrange="-0.1745 1.1345"/> -->
+		<position class="body_joint4" name="body4" joint="body_joint4"/>
+
+		<position class="armr_joint9" name="armr" joint="armr_joint9"/>
+		<position class="armr_joint1" name="armr1" joint="armr_joint1" />
+		<position class="armr_joint2" name="armr2" joint="armr_joint2"/>
+		<position class="armr_joint3" name="armr3" joint="armr_joint3"/>
+		<position class="armr_joint4" name="armr4" joint="armr_joint4"/>
+		<position class="armr_joint5" name="armr5" joint="armr_joint5"/>
+		<position class="handr_joint1" name="handr1" joint="handr_joint1"/>
+		<position class="handr_joint2" name="handr2" joint="handr_joint2"/>
+
+		<position class="arml_joint9" name="arml" joint="arml_joint9"/>
+		<position class="arml_joint1" name="arml1" joint="arml_joint1"/>
+		<position class="arml_joint2" name="arml2" joint="arml_joint2"/>
+		<position class="arml_joint3" name="arml3" joint="arml_joint3"/>
+		<position class="arml_joint4" name="arml4" joint="arml_joint4"/>
+		<position class="arml_joint5" name="arml5" joint="arml_joint5"/>
+		<position class="handl_joint1" name="handl1" joint="handl_joint1"/>
+		<position class="handl_joint2" name="handl2" joint="handl_joint2"/>
+	</actuator>
+	<sensor>
+		<!-- <jointpos name="body2_pos" joint="body_joint2" /> -->
+		<!-- <jointpos name="body3_pos" joint="body_joint3" /> -->
+		<jointpos name="body4_pos" joint="body_joint4" />
+
+		<!-- <jointvel name="body2_vel" joint="body_joint2" /> -->
+		<!-- <jointvel name="body3_vel" joint="body_joint3" /> -->
+		<jointvel name="body4_vel" joint="body_joint4" />
+
+		<!-- <jointactuatorfrc name="body2_torque" joint="body_joint2" /> -->
+		<!-- <jointactuatorfrc name="body3_torque" joint="body_joint3" /> -->
+		<jointactuatorfrc name="body4_torque" joint="body_joint4" />
+	</sensor>
+</mujoco>
