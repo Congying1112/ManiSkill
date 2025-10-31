@@ -14,7 +14,7 @@ from typing import List, Optional, Annotated, Union
 
 @dataclass
 class Args:
-    env_id: Annotated[str, tyro.conf.arg(aliases=["-e"])] = "PickHolder-v1"
+    env_id: Annotated[str, tyro.conf.arg(aliases=["-e"])] = "PickupHolder-v1"
     """The environment ID of the task you want to simulate"""
 
     obs_mode: Annotated[str, tyro.conf.arg(aliases=["-o"])] = "none"
