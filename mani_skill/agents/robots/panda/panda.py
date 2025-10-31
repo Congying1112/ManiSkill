@@ -264,6 +264,32 @@ class Panda(BaseAgent):
         )
         return torch.logical_and(lflag, rflag)
 
+    def grasper_angle(self, object: Actor):
+        """Get grasping angle between the robot and an object
+
+        Args:
+            object (Actor): The object to check if the robot is grasping
+
+        Returns:
+            dict: A dictionary containing:
+                - left_finger_angle (torch.Tensor): The contact angle on the left finger
+                - right_finger_angle (torch.Tensor): The contact angle on the right finger
+        """
+        l_contact_forces = self.scene.get_pairwise_contact_forces(
+            self.finger1_link, object
+        )
+        r_contact_forces = self.scene.get_pairwise_contact_forces(
+            self.finger2_link, object
+        )
+
+        # direction to open the gripper
+        ldirection = self.finger1_link.pose.to_transformation_matrix()[..., :3, 1]
+        rdirection = -self.finger2_link.pose.to_transformation_matrix()[..., :3, 1]
+        langle = common.compute_angle_between(ldirection, l_contact_forces)
+        rangle = common.compute_angle_between(rdirection, r_contact_forces)
+
+        return langle + rangle
+
     def is_static(self, threshold: float = 0.2):
         qvel = self.robot.get_qvel()[..., :-2]
         return torch.max(torch.abs(qvel), 1)[0] <= threshold

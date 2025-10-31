@@ -4,7 +4,7 @@ b = -0.8
 XWJG_CONFIGS = {
     "panda_wristcam": {
         "agent_pos": [-0.2, -0.6, 0],
-        "holder_half_size": 0.02,
+        "holder_half_size": 0.1,
         "goal_thresh": 0.025,
         "holder_spawn_half_size": 0.05,
         "holder_spawn_center": (0, 0),
@@ -25,7 +25,7 @@ XWJG_CONFIGS = {
     },
     "fetch": {
         "agent_pos": [-0.2, -0.6, 0],
-        "holder_half_size": 0.02,
+        "holder_half_size": 0.1,
         "goal_thresh": 0.025,
         "holder_spawn_half_size": 0.1,
         "holder_spawn_center": (0, 0),

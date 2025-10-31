@@ -19,17 +19,9 @@ from mani_skill.utils.structs.pose import Pose
 from mani_skill.envs.tasks.xwjg.cfgs import XWJG_CONFIGS
 
 PICKUP_HOLDER_DOC_STRING = """**Task Description:**
-A simple task where the objective is to grasp a red holder with the {robot_id} robot and move it to a target goal position. This is also the *baseline* task to test whether a robot with manipulation
-capabilities can be simulated and trained properly. Hence there is extra code for some robots to set them up properly in this environment as well as the table scene builder.
-
-**Randomizations:**
-- the holder's xy position is randomized on top of a table in the region [0.1, 0.1] x [-0.1, -0.1]. It is placed flat on the table
-- the holder's z-axis rotation is randomized to a random angle
-- the target goal position (marked by a green sphere) of the holder has its xy position randomized in the region [0.1, 0.1] x [-0.1, -0.1] and z randomized in [0, 0.3]
-
-**Success Conditions:**
-- the holder position is within `goal_thresh` (default 0.025m) euclidean distance of the goal position
-- the robot is static (q velocity < 0.2)
+任务目标为用机器人{robot_id}抓起holder（一个小零件）并将其提起到一定高度。
+任务开始时，holder静止放置在桌面上，机器人需要移动到holder旁边，抓取holder并将其提起到指定高度（pickup height）。
+任务成功的条件为holder被牢固抓取且提升到目标高度以上，同时机器人保持静止
 """
 
 @register_env("PickupHolder-v1", max_episode_steps=150)
@@ -80,8 +72,8 @@ class PickupHolderEnv(BaseEnv):
 
     def _load_agent(self, options: dict):
         positions = self.agent_pos
-        positions += np.random.rand(3) * 0.1  # 示例范围，调整z坐标需谨慎
-        positions[2] = 0  # 保持z坐标不变
+        # positions += np.random.rand(3) * 0.1  # 示例范围，调整z坐标需谨慎
+        # positions[2] = 0  # 保持z坐标不变
         super()._load_agent(options, sapien.Pose(p=positions, q=euler2quat(0, 0, np.pi*3/4 + np.random.rand() * 0.1)))
 
     def _load_scene(self, options: dict):
@@ -121,44 +113,34 @@ class PickupHolderEnv(BaseEnv):
             b = len(env_idx)
             self.xwjg_scene.initialize(env_idx)
             xyz = self.holder.pose.p
-            xyz[:, :2] += (
-                torch.rand((b, 2)) * self.holder_spawn_half_size * 2
-                - self.holder_spawn_half_size
-            )
-            xyz[:, 0] += self.holder_spawn_center[0]
-            xyz[:, 1] += self.holder_spawn_center[1]
-            xyz[:, 2] = self.holder_half_size
+            # xyz[:, :2] += (
+            #     torch.rand((b, 2)) * self.holder_spawn_half_size * 2
+            #     - self.holder_spawn_half_size
+            # )
+            # xyz[:, 0] += self.holder_spawn_center[0]
+            # xyz[:, 1] += self.holder_spawn_center[1]
+            # xyz[:, 2] = self.holder_half_size
             qs = randomization.random_quaternions(b, lock_x=True, lock_y=True)
             self.holder.set_pose(Pose.create_from_pq(xyz, qs))
-
-            goal_xyz = torch.zeros((b, 3))
-            goal_xyz[:, :2] = (
-                torch.rand((b, 2)) * self.holder_spawn_half_size * 2
-                - self.holder_spawn_half_size
-            )
-            goal_xyz[:, 0] += self.holder_spawn_center[0]
-            goal_xyz[:, 1] += self.holder_spawn_center[1]
-            goal_xyz[:, 2] = torch.rand((b)) * self.max_goal_height + xyz[:, 2]
-            self.goal_site.set_pose(Pose.create_from_pq(goal_xyz))
 
     def _get_obs_extra(self, info: dict):
         # in reality some people hack is_grasped into observations by checking if the gripper can close fully or not
         obs = dict(
             is_grasped=info["is_grasped"],
             tcp_pose=self.agent.tcp_pose.raw_pose,
-            goal_pos=self.goal_site.pose.p,
         )
         if "state" in self.obs_mode:
             obs.update(
                 obj_pose=self.holder.pose.raw_pose,
                 tcp_to_obj_pos=self.holder.pose.p - self.agent.tcp_pose.p,
-                obj_to_goal_pos=self.goal_site.pose.p - self.holder.pose.p,
+                gripper_width=self.agent.robot.get_gripper_width(),  # 夹爪宽度
+                holder_velocity=self.holder.linear_velocity,  # holder速度
             )
         return obs
 
     def evaluate(self):
         is_grasped = self.agent.is_grasping(self.holder)
-        is_pickup = torch.abs(self.holder.pose.p[:,2] - self.pickup_height) < 0.1
+        is_pickup = self.holder.pose.p[:,2] > self.pickup_height
         is_robot_static = self.agent.is_static(0.2)
         return {
             "success": is_grasped & is_pickup & is_robot_static,
@@ -168,20 +150,45 @@ class PickupHolderEnv(BaseEnv):
         }
 
     def compute_dense_reward(self, obs: Any, action: torch.Tensor, info: dict):
+         # 1. 改进接近奖励 - 使用更平滑的衰减
         tcp_to_obj_dist = torch.linalg.norm(
             self.holder.pose.p - self.agent.tcp_pose.p, axis=1
         )
-        reaching_reward = 1 - torch.tanh(5 * tcp_to_obj_dist)
+        reaching_reward = 2.0 * torch.exp(-2.0 * tcp_to_obj_dist)  # 距离为0时奖励2
         reward = reaching_reward
 
+        # 2. 添加朝向奖励 - 鼓励夹爪以正确朝向接近
+        # tcp_to_obj_vec = self.holder.pose.p - self.agent.tcp_pose.p
+        # tcp_forward = self.agent.tcp_pose.transform_vectors(
+        #     torch.tensor([1, 0, 0], device=self.device).repeat(len(tcp_to_obj_vec), 1)
+        # )
+        # alignment = torch.sum(tcp_forward * tcp_to_obj_vec, dim=1) / (tcp_to_obj_dist + 1e-6)
+        # alignment_reward = 0.5 * torch.clamp(alignment, 0, 1)
+        # reward += alignment_reward
+
+        # 3. 改进抓取奖励 - 连续信号
         is_grasped = info["is_grasped"]
-        reward += is_grasped
+        grasper_angle = self.agent.grasper_angle(self.holder)  # 需要获取夹爪宽度
+        grasp_quality = torch.exp(-10 * grasper_angle)  # 夹爪闭合程度
+        grasp_reward = 2.0 * is_grasped * grasp_quality
+        reward += grasp_reward
 
-        obj_to_goal_dist = torch.abs(self.holder.pose.p[:, 2] - self.pickup_height)
-        place_reward = 1 - torch.tanh(5 * obj_to_goal_dist)
-        reward += place_reward * is_grasped
+        # 4. 改进提升奖励 - 只惩罚高度不足的情况
+        height_diff = torch.clamp(self.pickup_height - self.holder.pose.p[:, 2], min=0)
+        lift_reward = 2.0 * torch.exp(-5.0 * height_diff)
+        reward += lift_reward * is_grasped
 
-        reward[info["success"]] = 5
+        # 5. 添加稳定性奖励
+        if is_grasped:
+            # 惩罚holder的角速度 - 鼓励稳定抓取
+            obj_ang_vel = torch.linalg.norm(self.holder.angular_velocity, dim=1)
+            stability_reward = 1.0 * torch.exp(-2.0 * obj_ang_vel)
+            reward += stability_reward
+
+        # 6. 改进成功奖励 - 渐进式而不是直接设置
+        success_bonus = 3.0 * info["success"].float()  # 稍微降低成功奖励
+        reward += success_bonus
+
         return reward
 
     def compute_normalized_dense_reward(
