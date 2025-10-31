@@ -16,6 +16,7 @@ from mani_skill.utils.building import actors
 from mani_skill.utils.registration import register_env
 from mani_skill.utils.scene_builder.xwjg import XWJGSceneBuilder
 from mani_skill.utils.structs.pose import Pose
+from mani_skill.envs.tasks.xwjg.cfgs import XWJG_CONFIGS
 
 PICK_HOLDER_DOC_STRING = """**Task Description:**
 A simple task where the objective is to grasp a red holder with the {robot_id} robot and move it to a target goal position. This is also the *baseline* task to test whether a robot with manipulation
@@ -30,44 +31,6 @@ capabilities can be simulated and trained properly. Hence there is extra code fo
 - the holder position is within `goal_thresh` (default 0.025m) euclidean distance of the goal position
 - the robot is static (q velocity < 0.2)
 """
-a= -0.9
-b = -0.9
-PICK_HOLDER_CONFIGS = {
-    "panda_wristcam": {
-        "holder_half_size": 0.02,
-        "goal_thresh": 0.025,
-        "holder_spawn_half_size": 0.05,
-        "holder_spawn_center": (0, 0),
-        "max_goal_height": 0.3,
-        "sensor_cam_eye_pos": [
-            a,
-            b,
-            1,
-        ],  # sensor cam is the camera used for visual observation generation
-        "sensor_cam_target_pos": [a, b, 0],
-        "human_cam_eye_pos": [
-            a,
-            b,
-            0.5,
-        ],  # human cam is the camera used for human rendering (i.e. eval videos)
-        "human_cam_target_pos": [a+0.1, b+0.1, 0.35],
-    },
-    "fetch": {
-        "holder_half_size": 0.02,
-        "goal_thresh": 0.025,
-        "holder_spawn_half_size": 0.1,
-        "holder_spawn_center": (0, 0),
-        "max_goal_height": 0.3,
-        "sensor_cam_eye_pos": [
-            a,
-            b,
-            1,
-        ],  # sensor cam is the camera used for visual observation generation
-        "sensor_cam_target_pos": [a, b, 0],
-        "human_cam_eye_pos": [0.6, 0.7, 0.6],
-        "human_cam_target_pos": [0.0, 0.0, 0.35],
-    },
-}
 
 
 @register_env("PickHolder-v1", max_episode_steps=400)
@@ -86,10 +49,10 @@ class PickHolderEnv(BaseEnv):
 
     def __init__(self, *args, robot_uids="fetch", robot_init_qpos_noise=0.02, **kwargs):
         self.robot_init_qpos_noise = robot_init_qpos_noise
-        if robot_uids in PICK_HOLDER_CONFIGS:
-            cfg = PICK_HOLDER_CONFIGS[robot_uids]
+        if robot_uids in XWJG_CONFIGS:
+            cfg = XWJG_CONFIGS[robot_uids]
         else:
-            cfg = PICK_HOLDER_CONFIGS["panda_wristcam"]
+            cfg = XWJG_CONFIGS["panda_wristcam"]
         self.holder_half_size = cfg["holder_half_size"]
         self.goal_thresh = cfg["goal_thresh"]
         self.holder_spawn_half_size = cfg["holder_spawn_half_size"]
@@ -99,6 +62,7 @@ class PickHolderEnv(BaseEnv):
         self.sensor_cam_target_pos = cfg["sensor_cam_target_pos"]
         self.human_cam_eye_pos = cfg["human_cam_eye_pos"]
         self.human_cam_target_pos = cfg["human_cam_target_pos"]
+        self.agent_pos = cfg["agent_pos"]
         super().__init__(*args, robot_uids=robot_uids, **kwargs)
 
     @property
@@ -116,7 +80,7 @@ class PickHolderEnv(BaseEnv):
         return CameraConfig("render_camera", pose, 512, 512, 1, 0.01, 100)
 
     def _load_agent(self, options: dict):
-        positions = [-0.2, -0.6, 0]
+        positions = self.agent_pos
         positions += np.random.rand(3) * 0.1  # 示例范围，调整z坐标需谨慎
         positions[2] = 0  # 保持z坐标不变
         super()._load_agent(options, sapien.Pose(p=positions, q=euler2quat(0, 0, np.pi*3/4 + np.random.rand() * 0.1)))
