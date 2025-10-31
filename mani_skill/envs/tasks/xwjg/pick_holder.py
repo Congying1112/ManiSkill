@@ -30,8 +30,8 @@ capabilities can be simulated and trained properly. Hence there is extra code fo
 - the holder position is within `goal_thresh` (default 0.025m) euclidean distance of the goal position
 - the robot is static (q velocity < 0.2)
 """
-a= -0.3
-b = -0.3
+a= -0.9
+b = -0.9
 PICK_HOLDER_CONFIGS = {
     "panda_wristcam": {
         "holder_half_size": 0.02,
@@ -46,11 +46,11 @@ PICK_HOLDER_CONFIGS = {
         ],  # sensor cam is the camera used for visual observation generation
         "sensor_cam_target_pos": [a, b, 0],
         "human_cam_eye_pos": [
-            0.6,
-            0.7,
-            0.6,
+            a,
+            b,
+            0.5,
         ],  # human cam is the camera used for human rendering (i.e. eval videos)
-        "human_cam_target_pos": [0.0, 0.0, 0.35],
+        "human_cam_target_pos": [a+0.1, b+0.1, 0.35],
     },
     "fetch": {
         "holder_half_size": 0.02,
