@@ -57,7 +57,7 @@ class XWJGSceneBuilder(SceneBuilder):
                     [0.0, np.pi / 8, 0, -np.pi * 5 / 8, 0, np.pi * 3 / 4, -np.pi / 4, 0.04, 0.04]
                 )
                 # fmt: on
-                if self._enhanced_determinism:
+                if self.env._enhanced_determinism:
                     qpos = (
                         self._batched_episode_rng[env_idx].normal(
                             0, self.robot_init_qpos_noise, len(qpos)
@@ -66,7 +66,7 @@ class XWJGSceneBuilder(SceneBuilder):
                     )
                 else:
                     qpos = (
-                        self._episode_rng.normal(
+                        self.env._episode_rng.normal(
                             0, self.robot_init_qpos_noise, (b, len(qpos))
                         )
                         + qpos
