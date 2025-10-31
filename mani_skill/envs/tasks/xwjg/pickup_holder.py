@@ -179,11 +179,10 @@ class PickupHolderEnv(BaseEnv):
         reward += lift_reward * is_grasped
 
         # 5. 添加稳定性奖励
-        if is_grasped:
-            # 惩罚holder的角速度 - 鼓励稳定抓取
-            obj_ang_vel = torch.linalg.norm(self.holder.angular_velocity, dim=1)
-            stability_reward = 1.0 * torch.exp(-2.0 * obj_ang_vel)
-            reward += stability_reward
+        # 惩罚holder的角速度 - 鼓励稳定抓取
+        obj_ang_vel = torch.linalg.norm(self.holder.angular_velocity, dim=1)
+        stability_reward = is_grasped * torch.exp(-2.0 * obj_ang_vel)
+        reward += stability_reward
 
         # 6. 改进成功奖励 - 渐进式而不是直接设置
         success_bonus = 3.0 * info["success"].float()  # 稍微降低成功奖励
