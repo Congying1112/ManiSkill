@@ -116,7 +116,7 @@ class PickHolderEnv(BaseEnv):
         return CameraConfig("render_camera", pose, 512, 512, 1, 0.01, 100)
 
     def _load_agent(self, options: dict):
-        positions = [0, -0.6, 0]
+        positions = [-0.2, -0.6, 0]
         positions += np.random.rand(3) * 0.1  # 示例范围，调整z坐标需谨慎
         positions[2] = 0  # 保持z坐标不变
         super()._load_agent(options, sapien.Pose(p=positions, q=euler2quat(0, 0, np.pi*3/4 + np.random.rand() * 0.1)))
