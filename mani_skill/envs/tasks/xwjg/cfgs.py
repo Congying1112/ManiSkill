@@ -17,11 +17,11 @@ XWJG_CONFIGS = {
         ],  # sensor cam is the camera used for visual observation generation
         "sensor_cam_target_pos": [a+0.5, b+0.5, 0.2],
         "human_cam_eye_pos": [
-            a,
-            b,
-            0.8,
+            a-0.5,
+            b-0.5,
+            1.2,
         ],  # human cam is the camera used for human rendering (i.e. eval videos)
-        "human_cam_target_pos": [a+0.5, b+0.5, 0.2],
+        "human_cam_target_pos": [a+0.2, b+0.2, 0.2],
     },
     "fetch": {
         "agent_pos": [-0.2, -0.6, 0],
