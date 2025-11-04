@@ -145,3 +145,7 @@ python ppo_rgb.py --env_id="PickupHolder-v1" --num_envs=4 --update_epochs=8 --nu
 # train
 python ppo_rgb.py --env_id="PickupHolder-v1"   --num_envs=256 --update_epochs=8 --num_minibatches=32   --total_timesteps=1_000_000  --num_eval_steps=1000 --learning_rate=1e-4
 python ppo_rgb.py --env_id="PickupHolder-v1"   --num_envs=256 --update_epochs=8 --num_minibatches=32   --total_timesteps=80_000_000  --num_eval_steps=1000 --learning_rate=1e-4
+
+python ppo_rgb.py --env_id="PickHolderOnTable-v1" --num_envs=16 --update_epochs=8 --num_minibatches=8 --total_timesteps=1_000 --no-track
+
+python ppo_rgb.py --env_id="PickHolderOnTable-v1" --num_envs=256 --update_epochs=8 --num_minibatches=32 --total_timesteps=20_000_000
