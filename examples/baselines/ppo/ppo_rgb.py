@@ -340,7 +340,7 @@ if __name__ == "__main__":
             config["env_cfg"] = dict(**env_kwargs, num_envs=args.num_envs, env_id=args.env_id, reward_mode="normalized_dense", env_horizon=max_episode_steps, partial_reset=args.partial_reset)
             config["eval_env_cfg"] = dict(**env_kwargs, num_envs=args.num_eval_envs, env_id=args.env_id, reward_mode="normalized_dense", env_horizon=max_episode_steps, partial_reset=args.partial_reset)
             wandb.init(
-                project=args.wandb_project_name,
+                project=args.wandb_project_name+"-"+args.env_id,
                 entity=args.wandb_entity,
                 sync_tensorboard=False,
                 config=config,
