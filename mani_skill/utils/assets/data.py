@@ -41,7 +41,7 @@ def is_data_source_downloaded(data_source_id: str):
 def initialize_data_sources():
     DATA_SOURCES["ycb"] = DataSource(
         source_type="task_assets",
-        url="https://huggingface.co/datasets/haosulab/ManiSkill2/resolve/main/data/mani_skill2_ycb.zip",
+        url="https://hf-mirror.com/datasets/haosulab/ManiSkill2/resolve/main/data/mani_skill2_ycb.zip",
         target_path="assets/mani_skill2_ycb",
         checksum="1551724fd1ac7bad9807ebcf46dd4a788caed5c9499c1225b9bfa080ffbefcb3",
     )
@@ -66,7 +66,7 @@ def initialize_data_sources():
 
     DATA_SOURCES["bridge_v2_real2sim"] = DataSource(
         source_type="task_assets",
-        url="https://huggingface.co/datasets/haosulab/ManiSkill_bridge_v2_real2sim/resolve/main/bridge_v2_real2sim_dataset.zip",
+        url="https://hf-mirror.com/datasets/haosulab/ManiSkill_bridge_v2_real2sim/resolve/main/bridge_v2_real2sim_dataset.zip",
         target_path="tasks/bridge_v2_real2sim_dataset",
         checksum="618512a205b4528cafecdad14b1788ed1130879f3064deb406516ed5b9c5ba92",
     )
@@ -121,19 +121,19 @@ def initialize_data_sources():
 
     DATA_SOURCES["ReplicaCADRearrange"] = DataSource(
         source_type="scene",
-        url="https://huggingface.co/datasets/haosulab/ReplicaCADRearrange/resolve/main/rearrange.zip",
+        url="https://hf-mirror.com/datasets/haosulab/ReplicaCADRearrange/resolve/main/rearrange.zip",
         target_path="scene_datasets/replica_cad_dataset/rearrange",
     )
 
     DATA_SOURCES["AI2THOR"] = DataSource(
         source_type="scene",
-        url="https://huggingface.co/datasets/haosulab/AI2THOR/resolve/main/ai2thor.zip",
+        url="https://hf-mirror.com/datasets/haosulab/AI2THOR/resolve/main/ai2thor.zip",
         target_path="scene_datasets/ai2thor",
     )
 
     DATA_SOURCES["RoboCasa"] = DataSource(
         source_type="scene",
-        url="https://huggingface.co/datasets/haosulab/RoboCasa/resolve/main/robocasa_dataset.zip",
+        url="https://hf-mirror.com/datasets/haosulab/RoboCasa/resolve/main/robocasa_dataset.zip",
         target_path="scene_datasets/robocasa_dataset",
     )
 
@@ -195,7 +195,7 @@ def initialize_data_sources():
     )
     DATA_SOURCES["oakink-v2"] = DataSource(
         source_type="task_assets",
-        url="https://huggingface.co/datasets/haosulab/OakInk-v2/resolve/main/object_repair.zip",
+        url="https://hf-mirror.com/datasets/haosulab/OakInk-v2/resolve/main/object_repair.zip",
         target_path="tasks/oakink-v2",
     )
 
