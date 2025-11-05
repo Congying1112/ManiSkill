@@ -5,7 +5,8 @@ from pathlib import Path
 import numpy as np
 import sapien
 import torch
-from transforms3d.euler import euler2quat
+from transforms3d.euler import euler2quat, quat2euler
+from pytorch3d.transforms import quaternion_to_axis_angle, matrix_to_euler_angles, quaternion_to_matrix
 
 import mani_skill.envs.utils.randomization as randomization
 from mani_skill.agents.robots import SO100, Fetch, PandaWristCam, WidowXAI, XArm6Robotiq
@@ -16,6 +17,42 @@ from mani_skill.utils.building import actors
 from mani_skill.utils.registration import register_env
 from mani_skill.utils.scene_builder.table import TableSceneBuilder
 from mani_skill.utils.structs.pose import Pose
+
+
+quat2euler_for_2dtensor = lambda src : torch.tensor([quat2euler(q) for q in src])
+
+def batch_quat2euler_tensor(quat_tensor):
+    """批量转换四元数Tensor到欧拉角Tensor"""
+    quat_np = quat_tensor.numpy()
+    
+    # 使用apply_along_axis进行批量处理
+    euler_np = np.apply_along_axis(
+        lambda q: quat2euler(q), 
+        axis=1, 
+        arr=quat_np
+    )
+    
+    return torch.tensor(euler_np, dtype=quat_tensor.dtype)
+
+def normAngle_float(a):
+    if a <= -np.pi:
+        a += 2 * np.pi
+        return normAngle(a)
+    elif a >= np.pi:
+        a -= 2 * np.pi
+        return normAngle(a)
+    else:
+        return a
+    
+def normAngle(tensor):
+    """
+    将张量限制在[-pi, pi]区间
+    使用模运算实现，支持GPU计算
+    """
+    # 使用模运算将角度映射到[0, 2pi)区间
+    tensor_mod = torch.remainder(tensor, 2 * torch.pi)
+    # 将大于pi的值减去2pi，映射到[-pi, pi]区间
+    return  torch.where(tensor_mod > torch.pi, tensor_mod - 2 * torch.pi, tensor_mod)
 
 PICK_HOLDER_ON_TABLE_DOC_STRING = """**Task Description:**
 A simple task where the objective is to grasp a red cube with the {robot_id} robot and move it to a target goal position. This is also the *baseline* task to test whether a robot with manipulation
@@ -33,6 +70,7 @@ capabilities can be simulated and trained properly. Hence there is extra code fo
 
 TASK_CONFIG = {
     "target_half_size": 0.02,
+    "goal_theta_thresh": 0.06,
     "goal_thresh": 0.025,
     "target_spawn_half_size": 0.1,
     "target_spawn_center": (0, 0),
@@ -90,6 +128,7 @@ class PickHolderOnTableEnv(BaseEnv):
         self.robot_init_qpos_noise = robot_init_qpos_noise
         self.target_half_size = TASK_CONFIG["target_half_size"]
         self.goal_thresh = TASK_CONFIG["goal_thresh"]
+        self.goal_theta_thresh = TASK_CONFIG["goal_theta_thresh"]
         self.target_spawn_half_size = TASK_CONFIG["target_spawn_half_size"]
         self.target_spawn_center = TASK_CONFIG["target_spawn_center"]
         self.max_goal_height = TASK_CONFIG["max_goal_height"]
@@ -154,16 +193,16 @@ class PickHolderOnTableEnv(BaseEnv):
             b = len(env_idx)
             self.table_scene.initialize(env_idx)
             xyz = torch.zeros((b, 3))
-            xyz[:, :2] = (
-                torch.rand((b, 2)) * self.target_spawn_half_size * 2
-                - self.target_spawn_half_size
-            )
+
+            # xyz[:, :2] = (
+            #     torch.rand((b, 2)) * self.target_spawn_half_size * 2
+            #     - self.target_spawn_half_size
+            # )
             xyz[:, 0] += self.target_spawn_center[0]
             xyz[:, 1] += self.target_spawn_center[1]
-
             xyz[:, 2] = self.target_half_size
             qs = randomization.random_quaternions(b, lock_x=True, lock_y=True)
-            self.holder.set_pose(Pose.create_from_pq(xyz, qs))
+            self.holder.set_pose(Pose.create_from_pq(xyz))
 
             goal_xyz = torch.zeros((b, 3))
             goal_xyz[:, :2] = (
@@ -180,7 +219,8 @@ class PickHolderOnTableEnv(BaseEnv):
         obs = dict(
             is_grasped=info["is_grasped"],
             tcp_pose=self.agent.tcp_pose.raw_pose,
-            goal_pos=self.goal_site.pose.p,
+            obj_pose=self.holder.pose.raw_pose,
+            goal_pos=self.goal_site.pose.raw_pose,
         )
         if "state" in self.obs_mode:
             obs.update(
@@ -209,8 +249,37 @@ class PickHolderOnTableEnv(BaseEnv):
             self.holder.pose.p - self.agent.tcp_pose.p, axis=1
         )
         reaching_reward = 1 - torch.tanh(5 * tcp_to_obj_dist)
-        reward = reaching_reward
-        
+        # print("reaching_reward", tcp_to_obj_dist, reaching_reward)
+    
+        # 加抓取位置
+        # # print("tcp_pose", self.agent.tcp_pose.raw_pose[:, 3:], quat2euler_for_2dtensor(self.agent.tcp_pose.raw_pose[:, 3:]))
+        # # print("obj_pose", self.holder.pose.raw_pose[:, 3:], quat2euler_for_2dtensor(self.holder.pose.raw_pose[:, 3:]))
+        # print(self.agent.tcp_pose.raw_pose[:, 3:])
+        # print("tcp_pose", matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ"))
+        # print("holder_pose", matrix_to_euler_angles(quaternion_to_matrix(self.holder.pose.raw_pose[:, 3:]), "XYZ"))
+        # print("--delta", matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")-matrix_to_euler_angles(quaternion_to_matrix(self.holder.pose.raw_pose[:, 3:]), "XYZ"))
+        # print("--result before norm", 
+        #         matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")
+        #         -matrix_to_euler_angles(quaternion_to_matrix(self.holder.pose.raw_pose[:, 3:]), "XYZ")
+        #         -torch.tensor([np.pi, 0, np.pi], device=self.device))
+        # print("--result", normAngle(
+        #         matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")
+        #         -matrix_to_euler_angles(quaternion_to_matrix(self.holder.pose.raw_pose[:, 3:]), "XYZ")
+        #         -torch.tensor([np.pi, 0, np.pi], device=self.device)))
+        # print("--norm", torch.linalg.norm(normAngle(
+        #         matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")
+        #         -matrix_to_euler_angles(quaternion_to_matrix(self.holder.pose.raw_pose[:, 3:]), "XYZ")
+        #         -torch.tensor([np.pi, 0, np.pi], device=self.device)), axis=1))
+        is_grapper_placed = (
+            torch.linalg.norm(normAngle(
+                matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")
+                -matrix_to_euler_angles(quaternion_to_matrix(self.holder.pose.raw_pose[:, 3:]), "XYZ")
+                -torch.tensor([np.pi, 0, np.pi], device=self.device)), axis=1)
+            <= self.goal_theta_thresh
+        )
+        # print("is_grapper_placed", is_grapper_placed)
+        reward = torch.where(reaching_reward > 0.4, reaching_reward * is_grapper_placed, reaching_reward)
+        # print("reaching_reward---", reward)
         # tcp_to_obj_vec = self.holder.pose.p - self.agent.tcp_pose.p
         # tcp_forward = self.agent.tcp_pose.transform_vectors(
         #     torch.tensor([1, 0, 0], device=self.device).repeat(len(tcp_to_obj_vec), 1)
