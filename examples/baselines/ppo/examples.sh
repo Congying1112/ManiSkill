@@ -148,4 +148,4 @@ python ppo_rgb.py --env_id="PickupHolder-v1"   --num_envs=256 --update_epochs=8 
 
 python ppo_rgb.py --env_id="PickHolderOnTable-v1" --num_envs=16 --update_epochs=8 --num_minibatches=8 --total_timesteps=1_000 --no-track
 
-python ppo_rgb.py --env_id="PickHolderOnTable-v1" --num_envs=256 --update_epochs=8 --num_minibatches=32 --total_timesteps=20_000_000
+CUDA_VISIBLE_DEVICES=2 python ppo_rgb.py --env_id="PickHolderOnTable-v1" --num_envs=256 --update_epochs=8 --num_minibatches=32 --total_timesteps=20_000_000
