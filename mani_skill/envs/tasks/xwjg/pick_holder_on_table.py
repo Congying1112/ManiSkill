@@ -278,7 +278,7 @@ class PickHolderOnTableEnv(BaseEnv):
             <= self.goal_theta_thresh
         )
         # print("is_grapper_placed", is_grapper_placed)
-        reward = torch.where(reaching_reward > 0.4, reaching_reward * is_grapper_placed, reaching_reward)
+        reward = torch.where(reaching_reward < 0.3, reaching_reward * is_grapper_placed, reaching_reward)
         # print("reaching_reward---", reward)
         # tcp_to_obj_vec = self.holder.pose.p - self.agent.tcp_pose.p
         # tcp_forward = self.agent.tcp_pose.transform_vectors(
