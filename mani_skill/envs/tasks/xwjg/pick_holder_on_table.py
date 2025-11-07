@@ -210,16 +210,6 @@ class PickHolderOnTableEnv(BaseEnv):
             self, robot_init_qpos_noise=self.robot_init_qpos_noise
         )
         self.table_scene.build()
-        # self.cube = actors.build_cube(
-        #     self.scene,
-        #     half_size=self.target_half_size,
-        #     color=[1, 0, 0, 1],
-        #     name="cube",
-        #     initial_pose=sapien.Pose(p=[0, 0, self.target_half_size]),
-        # )
-        
-
-
         xyz = torch.zeros((3))
 
         xyz[:2] = (
@@ -237,20 +227,6 @@ class PickHolderOnTableEnv(BaseEnv):
         )["actor_builders"][0].set_initial_pose(
             Pose.create_from_pq(xyz, qs)
         ).build_dynamic("holder")
-
-        # self.grap_site = actors.build_sphere(
-        #     self.scene,
-        #     radius=0.04,
-        #     color=[1, 0, 0, 1],
-        #     name="grap_site",
-        #     body_type="kinematic",
-        #     add_collision=False,
-        #     initial_pose=sapien.Pose(),
-        # )
-        # self.grap_site.set_parent(self.holder, sapien.Pose([0.1, 0, 0]))
-        # self._hidden_objects.append(self.grap_site)
-
-
         
         self.goal_site = actors.build_sphere(
             self.scene,
@@ -336,15 +312,16 @@ class PickHolderOnTableEnv(BaseEnv):
         # print("anchor_pose", self.print_pose(anchor_pose))
         # print("tcp_pose", self.print_pose(self.agent.tcp_pose))
         # print("delta_pose", self.print_pose(tcp_relative_pose))
-        tcp_to_anchor_dist = torch.linalg.norm(tcp_relative_pose.p, axis=1)
-        reach_to_anchor_reward = 1 - torch.tanh(5 * tcp_to_anchor_dist)
+        tcp_to_anchor_dist_norm = torch.linalg.norm(tcp_relative_pose.p, axis=1)
+        reach_to_anchor_reward = 1 - torch.tanh(5 * tcp_to_anchor_dist_norm)
+        info["reward"]["tcp_to_anchor_dist_norm"] = tcp_to_anchor_dist_norm
         info["reward"]["reach_to_anchor_reward"] = reach_to_anchor_reward
-        grapper_reward = 1 - torch.tanh(5 * torch.linalg.norm(matrix_to_euler_angles(quaternion_to_matrix(tcp_relative_pose.q), "XYZ")))
+        delta_angle_norm = torch.linalg.norm(matrix_to_euler_angles(quaternion_to_matrix(tcp_relative_pose.q), "XYZ"))
+        grapper_reward = 1 - torch.tanh(5 * delta_angle_norm)
+        info["reward"]["delta_angle_norm"] = delta_angle_norm
         info["reward"]["grapper_reward"] = grapper_reward
         # print("2", reach_to_anchor_reward, grapper_reward)
-        reward = reach_to_anchor_reward + grapper_reward
-
-
+        reward = reach_to_anchor_reward + grapper_reward        
 
         # tcp_to_anchor_dist = torch.linalg.norm(
         #     anchor_pose.p - self.agent.tcp_pose.p, axis=1
@@ -373,6 +350,13 @@ class PickHolderOnTableEnv(BaseEnv):
         # grapper_reward = 1 - torch.tanh(5 * grapper_rotation)
         # info["reward"]["grapper_reward"] = grapper_reward
         # reward = reach_to_anchor_reward + grapper_reward
+
+        # 到位前闭合爪子惩罚
+        reached_to_anchor = tcp_to_anchor_dist_norm < 0.015 and delta_angle_norm < 0.07
+        # Only apply penalty when not near anchor point
+        premature_grasp_penalty = -torch.where(reached_to_anchor, 0., (self.agent.grasper_angle() < 0.11).float())
+        reward += premature_grasp_penalty
+        info["reward"]["premature_grasp_penalty"] = premature_grasp_penalty
 
         # 物体抓取奖励
         is_grasped = info["is_grasped"]
