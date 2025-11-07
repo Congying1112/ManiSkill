@@ -1,4 +1,4 @@
-from typing import Any, Union
+from typing import Any, Union, Tuple
 import os.path as osp
 from pathlib import Path
 
@@ -17,6 +17,7 @@ from mani_skill.utils.building import actors
 from mani_skill.utils.registration import register_env
 from mani_skill.utils.scene_builder.table import TableSceneBuilder
 from mani_skill.utils.structs.pose import Pose
+from mani_skill.utils.structs.types import Array
 
 
 quat2euler_for_2dtensor = lambda src : torch.tensor([quat2euler(q) for q in src])
@@ -157,6 +158,53 @@ class PickHolderOnTableEnv(BaseEnv):
     def _load_agent(self, options: dict):
         super()._load_agent(options, sapien.Pose(p=[-0.615, 0, 0]))
 
+    
+    def create_anchor_system(self):
+        """创建完整的锚点系统"""
+        # 方法1: 纯计算锚点
+        self.anchor_positions = []  # 用于记录轨迹等
+
+    def get_anchor_pose1(self):
+        """获取锚点的世界坐标 - 正确方法"""
+        holder_pose = self.holder.pose
+
+        # 定义锚点相对于holder的局部位姿
+        anchor_local_position = np.array([-0.04, 0, 0])
+        
+        # 定义锚点相对于holder的局部旋转
+        from scipy.spatial.transform import Rotation as R
+        local_rotation = R.from_euler('z', 90, degrees=True).as_quat()
+
+        # 创建锚点的局部变换矩阵
+        anchor_local_matrix = np.eye(4)
+        anchor_local_matrix[:3, 3] = anchor_local_position  # 设置平移部分
+        anchor_local_matrix[:3, :3] = R.from_quat(local_rotation).as_matrix()  # 设置旋转部分
+
+        # 获取holder的变换矩阵
+        holder_matrix = holder_pose.to_transformation_matrix()
+        # 计算锚点的世界变换矩阵
+        anchor_world_matrix = holder_matrix @ anchor_local_matrix
+        # 从变换矩阵提取位姿
+        anchor_position = anchor_world_matrix[:3, 3]
+        anchor_rotation = sapien.Pose.from_transformation_matrix(anchor_world_matrix).q
+        
+        return sapien.Pose(anchor_position, anchor_rotation)
+    
+        # 将局部偏移转换到世界坐标系
+        anchor_world_homogeneous = holder_matrix @ np.array([-0.04, 0, 0, 1])
+        anchor_world = anchor_world_homogeneous[:, :3]  # 提取前三个分量（x, y, z）
+        
+        return anchor_world
+    
+    def get_anchor_pose(self):
+        """获取锚点的世界坐标 - 正确方法"""
+        holder_pose = self.holder.pose
+
+        # 定义锚点相对于holder的xiangdui位姿
+        relative_pose = sapien.Pose(p=[-0.04, 0, 0], q=euler2quat(np.pi, 0, 0))
+        
+        return holder_pose * relative_pose
+    
     def _load_scene(self, options: dict):
         self.table_scene = TableSceneBuilder(
             self, robot_init_qpos_noise=self.robot_init_qpos_noise
@@ -170,12 +218,39 @@ class PickHolderOnTableEnv(BaseEnv):
         #     initial_pose=sapien.Pose(p=[0, 0, self.target_half_size]),
         # )
         
+
+
+        xyz = torch.zeros((3))
+
+        xyz[:2] = (
+            torch.rand((2)) * self.target_spawn_half_size * 2
+            - self.target_spawn_half_size
+        )
+        xyz[0] += self.target_spawn_center[0]
+        xyz[1] += self.target_spawn_center[1]
+        xyz[2] = self.target_half_size
+        qs = randomization.random_quaternions(1, lock_x=True, lock_y=True)
+
         model_dir = Path(osp.dirname(__file__)) / "assets" / "MJCF"
         self.holder = self.scene.create_mjcf_loader().parse(
             str(model_dir / "stick_holder" / "stick_holder.xml")
         )["actor_builders"][0].set_initial_pose(
-            sapien.Pose()
+            Pose.create_from_pq(xyz, qs)
         ).build_dynamic("holder")
+
+        # self.grap_site = actors.build_sphere(
+        #     self.scene,
+        #     radius=0.04,
+        #     color=[1, 0, 0, 1],
+        #     name="grap_site",
+        #     body_type="kinematic",
+        #     add_collision=False,
+        #     initial_pose=sapien.Pose(),
+        # )
+        # self.grap_site.set_parent(self.holder, sapien.Pose([0.1, 0, 0]))
+        # self._hidden_objects.append(self.grap_site)
+
+
         
         self.goal_site = actors.build_sphere(
             self.scene,
@@ -194,15 +269,15 @@ class PickHolderOnTableEnv(BaseEnv):
             self.table_scene.initialize(env_idx)
             xyz = torch.zeros((b, 3))
 
-            # xyz[:, :2] = (
-            #     torch.rand((b, 2)) * self.target_spawn_half_size * 2
-            #     - self.target_spawn_half_size
-            # )
+            xyz[:, :2] = (
+                torch.rand((b, 2)) * self.target_spawn_half_size * 2
+                - self.target_spawn_half_size
+            )
             xyz[:, 0] += self.target_spawn_center[0]
             xyz[:, 1] += self.target_spawn_center[1]
             xyz[:, 2] = self.target_half_size
             qs = randomization.random_quaternions(b, lock_x=True, lock_y=True)
-            self.holder.set_pose(Pose.create_from_pq(xyz))
+            self.holder.set_pose(Pose.create_from_pq(xyz, qs))
 
             goal_xyz = torch.zeros((b, 3))
             goal_xyz[:, :2] = (
@@ -243,61 +318,76 @@ class PickHolderOnTableEnv(BaseEnv):
             "is_robot_static": is_robot_static,
             "is_grasped": is_grasped,
         }
+    
+    def print_pose(self, pose: sapien.Pose):
+        euler_angles = quat2euler(pose.q[0])
+        # print("Euler angles (radians):", euler_angles)
+        # print("Euler angles (degrees):", np.degrees(euler_angles))
+        return pose, np.degrees(euler_angles)
 
     def compute_dense_reward(self, obs: Any, action: torch.Tensor, info: dict):
-        tcp_to_obj_dist = torch.linalg.norm(
-            self.holder.pose.p - self.agent.tcp_pose.p, axis=1
-        )
-        reaching_reward = 1 - torch.tanh(5 * tcp_to_obj_dist)
-        # print("reaching_reward", tcp_to_obj_dist, reaching_reward)
-    
-        # 加抓取位置
-        # # print("tcp_pose", self.agent.tcp_pose.raw_pose[:, 3:], quat2euler_for_2dtensor(self.agent.tcp_pose.raw_pose[:, 3:]))
-        # # print("obj_pose", self.holder.pose.raw_pose[:, 3:], quat2euler_for_2dtensor(self.holder.pose.raw_pose[:, 3:]))
-        # print(self.agent.tcp_pose.raw_pose[:, 3:])
-        # print("tcp_pose", matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ"))
-        # print("holder_pose", matrix_to_euler_angles(quaternion_to_matrix(self.holder.pose.raw_pose[:, 3:]), "XYZ"))
-        # print("--delta", matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")-matrix_to_euler_angles(quaternion_to_matrix(self.holder.pose.raw_pose[:, 3:]), "XYZ"))
-        # print("--result before norm", 
-        #         matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")
-        #         -matrix_to_euler_angles(quaternion_to_matrix(self.holder.pose.raw_pose[:, 3:]), "XYZ")
-        #         -torch.tensor([np.pi, 0, np.pi], device=self.device))
-        # print("--result", normAngle(
-        #         matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")
-        #         -matrix_to_euler_angles(quaternion_to_matrix(self.holder.pose.raw_pose[:, 3:]), "XYZ")
-        #         -torch.tensor([np.pi, 0, np.pi], device=self.device)))
-        # print("--norm", torch.linalg.norm(normAngle(
-        #         matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")
-        #         -matrix_to_euler_angles(quaternion_to_matrix(self.holder.pose.raw_pose[:, 3:]), "XYZ")
-        #         -torch.tensor([np.pi, 0, np.pi], device=self.device)), axis=1))
-        is_grapper_placed = (
-            torch.linalg.norm(normAngle(
-                matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")
-                -matrix_to_euler_angles(quaternion_to_matrix(self.holder.pose.raw_pose[:, 3:]), "XYZ")
-                -torch.tensor([np.pi, 0, np.pi], device=self.device)), axis=1)
-            <= self.goal_theta_thresh
-        )
-        # print("is_grapper_placed", is_grapper_placed)
-        reward = torch.where(reaching_reward < 0.3, reaching_reward * is_grapper_placed, reaching_reward)
-        # print("reaching_reward---", reward)
-        # tcp_to_obj_vec = self.holder.pose.p - self.agent.tcp_pose.p
-        # tcp_forward = self.agent.tcp_pose.transform_vectors(
-        #     torch.tensor([1, 0, 0], device=self.device).repeat(len(tcp_to_obj_vec), 1)
-        # )
-        # alignment = torch.sum(tcp_forward * tcp_to_obj_vec, dim=1) / (tcp_to_obj_dist + 1e-6)
-        # alignment_reward = 0.5 * torch.clamp(alignment, 0, 1)
-        
-        # reward = reaching_reward + alignment_reward
+        info["reward"] = dict()
 
+        # 夹爪位姿与锚点位姿对齐奖励
+        anchor_pose = self.get_anchor_pose()
+        tcp_relative_pose = self.agent.tcp_pose * anchor_pose.inv()
+        # print("=========================")
+        # print("holder_pose", self.print_pose(self.holder.pose))
+        # print("anchor_pose", self.print_pose(anchor_pose))
+        # print("tcp_pose", self.print_pose(self.agent.tcp_pose))
+        # print("delta_pose", self.print_pose(tcp_relative_pose))
+        tcp_to_anchor_dist = torch.linalg.norm(tcp_relative_pose.p, axis=1)
+        reach_to_anchor_reward = 1 - torch.tanh(5 * tcp_to_anchor_dist)
+        info["reward"]["reach_to_anchor_reward"] = reach_to_anchor_reward
+        grapper_reward = 1 - torch.tanh(5 * torch.linalg.norm(matrix_to_euler_angles(quaternion_to_matrix(tcp_relative_pose.q), "XYZ")))
+        info["reward"]["grapper_reward"] = grapper_reward
+        # print("2", reach_to_anchor_reward, grapper_reward)
+        reward = reach_to_anchor_reward + grapper_reward
+
+
+
+        # tcp_to_anchor_dist = torch.linalg.norm(
+        #     anchor_pose.p - self.agent.tcp_pose.p, axis=1
+        # )
+        # reach_to_anchor_reward = 1 - torch.tanh(5 * tcp_to_anchor_dist)
+        # info["reward"]["reach_to_anchor_reward"] = reach_to_anchor_reward
+        # print("delta_angle",
+        #     matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ"),
+        #     matrix_to_euler_angles(quaternion_to_matrix(anchor_pose.raw_pose[:, 3:]), "XYZ"),
+        #     matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")-
+        #     matrix_to_euler_angles(quaternion_to_matrix(anchor_pose.raw_pose[:, 3:]), "XYZ"))
+    
+        # print("normed_delta_angle", normAngle(
+        #     matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")-
+        #     matrix_to_euler_angles(quaternion_to_matrix(anchor_pose.raw_pose[:, 3:]), "XYZ")))
+        
+        # print("normvalue_nromed_delta_angle", torch.linalg.norm(normAngle(
+        #     matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")-
+        #     matrix_to_euler_angles(quaternion_to_matrix(anchor_pose.raw_pose[:, 3:]), "XYZ"))))
+        # delta_angles = normAngle(
+        #     matrix_to_euler_angles(quaternion_to_matrix(self.agent.tcp_pose.raw_pose[:, 3:]), "XYZ")
+        #     - matrix_to_euler_angles(quaternion_to_matrix(anchor_pose.raw_pose[:, 3:]), "XYZ")
+        # )
+        # print("delta_angles", delta_angles)
+        # grapper_rotation = torch.linalg.norm(delta_angles, dim=1)
+        # grapper_reward = 1 - torch.tanh(5 * grapper_rotation)
+        # info["reward"]["grapper_reward"] = grapper_reward
+        # reward = reach_to_anchor_reward + grapper_reward
+
+        # 物体抓取奖励
         is_grasped = info["is_grasped"]
+        info["reward"]["is_grasped"] = is_grasped
         reward += is_grasped
 
+        # 物体放置奖励
         obj_to_goal_dist = torch.linalg.norm(
             self.goal_site.pose.p - self.holder.pose.p, axis=1
         )
-        place_reward = 1 - torch.tanh(5 * obj_to_goal_dist)
-        reward += place_reward * is_grasped
+        reach_to_goal_reward = 1 - torch.tanh(5 * obj_to_goal_dist)
+        info["reward"]["reach_to_goal_reward"] = reach_to_goal_reward * is_grasped
+        reward += reach_to_goal_reward * is_grasped
 
+        # 放置到位后机器人静止奖励
         qvel = self.agent.robot.get_qvel()
         if self.robot_uids in ["panda_wristcam", "widowxai"]:
             qvel = qvel[..., :-2]
@@ -305,8 +395,11 @@ class PickHolderOnTableEnv(BaseEnv):
             qvel = qvel[..., :-1]
         static_reward = 1 - torch.tanh(5 * torch.linalg.norm(qvel, axis=1))
         reward += static_reward * info["is_obj_placed"]
+        # print("static_reward", static_reward, "is_obj_placed", info["is_obj_placed"])
+        # print("reward1", reward)
 
-        reward[info["success"]] = 5
+        reward[info["success"]] = 10
+        info["reward"]["reward"] = reward
         return reward
 
     def compute_normalized_dense_reward(
