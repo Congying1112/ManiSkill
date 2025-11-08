@@ -316,7 +316,7 @@ class PickHolderOnTableEnv(BaseEnv):
         reach_to_anchor_reward = 1 - torch.tanh(5 * tcp_to_anchor_dist_norm)
         info["reward"]["tcp_to_anchor_dist_norm"] = tcp_to_anchor_dist_norm
         info["reward"]["reach_to_anchor_reward"] = reach_to_anchor_reward
-        delta_angle_norm = torch.linalg.norm(matrix_to_euler_angles(quaternion_to_matrix(tcp_relative_pose.q), "XYZ"))
+        delta_angle_norm = tcp_relative_pose.q[:, 3]
         grapper_reward = 1 - torch.tanh(5 * delta_angle_norm)
         info["reward"]["delta_angle_norm"] = delta_angle_norm
         info["reward"]["grapper_reward"] = grapper_reward
@@ -352,8 +352,7 @@ class PickHolderOnTableEnv(BaseEnv):
         # reward = reach_to_anchor_reward + grapper_reward
 
         # 到位前闭合爪子惩罚
-        reached_to_anchor = tcp_to_anchor_dist_norm < 0.015 and delta_angle_norm < 0.07
-        # Only apply penalty when not near anchor point
+        reached_to_anchor = (tcp_to_anchor_dist_norm < 0.015) & (delta_angle_norm < 0.07)
         premature_grasp_penalty = -torch.where(reached_to_anchor, 0., (self.agent.grasper_angle() < 0.11).float())
         reward += premature_grasp_penalty
         info["reward"]["premature_grasp_penalty"] = premature_grasp_penalty
