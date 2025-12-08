@@ -252,10 +252,10 @@ class RJ2506(BaseAgent):
         return deepcopy_dict(controller_configs)
 
     def _after_init(self):
-        self.finger1_link = sapien_utils.get_obj_by_name(
+        self.left_hand_finger1 = sapien_utils.get_obj_by_name(
             self.robot.get_links(), "left_hand_finger1"
         )
-        self.finger2_link = sapien_utils.get_obj_by_name(
+        self.left_hand_finger2 = sapien_utils.get_obj_by_name(
             self.robot.get_links(), "left_hand_finger2"
         )
         # self.finger1pad_link = sapien_utils.get_obj_by_name(
