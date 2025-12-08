@@ -1,0 +1,746 @@
+<?xml version="1.0" ?>
+<robot name="converted_robot">
+   <!--generated with mjcf_urdf_simple_converter (https://github.com/Yasu31/mjcf_urdf_simple_converter)-->
+   <link name="world">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.0"/>
+         <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <link name="base">
+      <inertial>
+         <origin xyz="-6.498401759884365e-05 -0.09188071850906741 0.3127403162935948" rpy="0.13418081798755516 -0.0017988303289813157 0.008696364529167763"/>
+         <mass value="19.896"/>
+         <inertia ixx="1.3055550013450121" iyy="1.2584529854740976" izz="0.32633174980838175" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="base_link">
+         <origin xyz="-7.263375878594455e-05 -0.08978550399814504 0.27971360479501506" rpy="-2.9722221985407398 -0.002572673232085654 0.009020493005327923"/>
+         <geometry>
+            <mesh filename="meshes/converted_base_link_b29999ff.obj"/>
+         </geometry>
+      </visual>
+      <visual name="body_Link1">
+         <origin xyz="4.3195199097281897e-05 -0.12151030453795579 0.7797892912301309" rpy="-1.5535297647663397 5.341531249980491e-06 -1.5708599630680826"/>
+         <geometry>
+            <mesh filename="meshes/converted_body_Link1_b29999ff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <joint type="fixed" name="world2base_fixed">
+      <parent link="world"/>
+      <child link="base"/>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="body_Link2">
+      <inertial>
+         <origin xyz="-0.06415602431810098 -7.091297677894575e-05 4.277330471678025e-05" rpy="1.5879830619004993 0.011314126118562307 0.011913486687098351"/>
+         <mass value="10.502724807257524"/>
+         <inertia ixx="0.02069663833866912" iyy="0.019671761721914215" izz="0.019420124932099585" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="body_Link2">
+         <origin xyz="-0.06415602431810098 -7.091297677894575e-05 4.277330471678025e-05" rpy="1.5879830619004993 0.011314126118562307 0.011913486687098351"/>
+         <geometry>
+            <mesh filename="meshes/converted_body_Link2_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <joint type="fixed" name="base2body_Link2_fixed">
+      <parent link="base"/>
+      <child link="body_Link2"/>
+      <origin xyz="0.0685 -0.12151 0.8195" rpy="1.5708005694372709 0.0 0.0"/>
+   </joint>
+   <link name="body_Link3">
+      <inertial>
+         <origin xyz="-0.00020772999759928777 0.07065198850712254 0.06752763591192971" rpy="-0.0011770385957169047 1.7355843213717748e-06 0.011312640843634075"/>
+         <mass value="7.074675481073754"/>
+         <inertia ixx="0.024877241124598864" iyy="0.02072245940343203" izz="0.013743987018020695" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="body_Link3">
+         <origin xyz="-0.00020772999759928777 0.07065198850712254 0.06752763591192971" rpy="-0.0011770385957169038 1.7355843215938194e-06 0.011312640843634075"/>
+         <geometry>
+            <mesh filename="meshes/converted_body_Link3_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <joint type="fixed" name="body_Link22body_Link3_fixed">
+      <parent link="body_Link2"/>
+      <child link="body_Link3"/>
+      <origin xyz="-0.0685 0.0 -0.0675" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="body_Link4">
+      <inertial>
+         <origin xyz="3.070431157419731e-05 0.12990622048817563 -0.0008418955181933981" rpy="-2.091244348227987 -1.4608368987713876 -2.6249081136581185"/>
+         <mass value="3.8575"/>
+         <inertia ixx="0.06969221794190254" iyy="0.06779681614589629" izz="0.016602153199601264" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="body_Link4">
+         <origin xyz="3.070431157419731e-05 0.12990622048817563 -0.0008418955181933981" rpy="-2.0912443482279874 -1.4608368987713873 -2.624908113658118"/>
+         <geometry>
+            <mesh filename="meshes/converted_body_Link4_b29999ff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="body_joint4_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="body_joint4">
+      <parent link="body_Link3"/>
+      <child link="body_joint4_jointbody"/>
+      <origin xyz="0.0 0.1935 0.0675" rpy="0.0 0.0 0.0"/>
+      <axis xyz="0.0 -1.0 0.0"/>
+      <limit lower="-1.414" upper="1.414" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="body_joint4_offset">
+      <parent link="body_joint4_jointbody"/>
+      <child link="body_Link4"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="armr_Link">
+      <inertial>
+         <origin xyz="-0.0937252948002788 -0.00034896464055210246 0.004759058031172348" rpy="3.0758220020868836 -1.4973860229605367 0.03856123973272352"/>
+         <mass value="6.244022566094781"/>
+         <inertia ixx="0.016409237359297554" iyy="0.014443179782072704" izz="0.008073495207217327" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="armr_Link">
+         <origin xyz="-0.0937252948002788 -0.00034896464055210246 0.004759058031172348" rpy="3.0758220020868836 -1.4973860229605367 0.03856123973272352"/>
+         <geometry>
+            <mesh filename="meshes/converted_armr_Link_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="armr_joint9_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="armr_joint9">
+      <parent link="body_Link4"/>
+      <child link="armr_joint9_jointbody"/>
+      <origin xyz="-0.1085 0.1275 0.0" rpy="0.0 0.0 0.0"/>
+      <axis xyz="1.0 0.0 0.0"/>
+      <limit lower="-2.9671" upper="2.9671" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="armr_joint9_offset">
+      <parent link="armr_joint9_jointbody"/>
+      <child link="armr_Link"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="armr_Link1">
+      <inertial>
+         <origin xyz="-0.0007460808179028043 -0.04551653126641594 0.033169441878593685" rpy="1.3397428636319106 -0.004348472278946858 0.006559461337062866"/>
+         <mass value="12.098283132467472"/>
+         <inertia ixx="0.03637804704088436" iyy="0.0323617023845281" izz="0.021428577354845157" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="armr_Link1">
+         <origin xyz="-0.0007460808179028043 -0.04551653126641594 0.033169441878593685" rpy="1.3397428636319106 -0.004348472278946858 0.006559461337062866"/>
+         <geometry>
+            <mesh filename="meshes/converted_armr_Link1_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="armr_joint1_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="armr_joint1">
+      <parent link="armr_Link"/>
+      <child link="armr_joint1_jointbody"/>
+      <origin xyz="-0.10794 0.0 -0.039999" rpy="0.0 0.0 0.0"/>
+      <axis xyz="0.0 0.0 1.0"/>
+      <limit lower="-3.1416" upper="0.1745" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="armr_joint1_offset">
+      <parent link="armr_joint1_jointbody"/>
+      <child link="armr_Link1"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="armr_Link2">
+      <inertial>
+         <origin xyz="-0.0007086823877339407 -0.11825879546678705 -1.3873620545104492e-05" rpy="1.57081674159239 0.05681951836951327 -0.00897580286129962"/>
+         <mass value="11.035910863394"/>
+         <inertia ixx="0.05136879033407387" iyy="0.0512206081992724" izz="0.010689087942904324" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="armr_Link2">
+         <origin xyz="-0.0007086823877339407 -0.11825879546678705 -1.3873620545104492e-05" rpy="1.57081674159239 0.05681951836951327 -0.008975802861299731"/>
+         <geometry>
+            <mesh filename="meshes/converted_armr_Link2_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="armr_joint2_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="armr_joint2">
+      <parent link="armr_Link1"/>
+      <child link="armr_joint2_jointbody"/>
+      <origin xyz="-6.2625e-05 -0.1255 0.0415" rpy="0.0 0.0 0.0"/>
+      <axis xyz="0.0 -1.0 0.0"/>
+      <limit lower="-1.1345" upper="1.1345" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="armr_joint2_offset">
+      <parent link="armr_joint2_jointbody"/>
+      <child link="armr_Link2"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="armr_Link3">
+      <inertial>
+         <origin xyz="0.04308166750616438 -0.024465176683527406 -0.000816616924894862" rpy="1.8708141350957925 -1.5579209067068864 -0.10004716734527475"/>
+         <mass value="7.1909047306057285"/>
+         <inertia ixx="0.017307957928158077" iyy="0.013989719996178027" izz="0.011265765317156248" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="armr_Link3">
+         <origin xyz="0.04308166750616438 -0.024465176683527406 -0.000816616924894862" rpy="1.8708141350957856 -1.5579209067068867 -0.10004716734526808"/>
+         <geometry>
+            <mesh filename="meshes/converted_armr_Link3_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="armr_joint3_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="armr_joint3">
+      <parent link="armr_Link2"/>
+      <child link="armr_joint3_jointbody"/>
+      <origin xyz="-0.05 -0.1805 0.0" rpy="0.0 0.0 0.0"/>
+      <axis xyz="-1.0 0.0 0.0"/>
+      <limit lower="-0.1745" upper="1.9199" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="armr_joint3_offset">
+      <parent link="armr_joint3_jointbody"/>
+      <child link="armr_Link3"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="armr_Link4">
+      <inertial>
+         <origin xyz="0.0015086893210192037 -0.08692096745957083 0.00014268310941552745" rpy="1.7134688190037062 -1.5658743602600644 -0.10047550623191093"/>
+         <mass value="6.42218805248264"/>
+         <inertia ixx="0.02111645323384892" iyy="0.020407865007392337" izz="0.005492748477294547" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="armr_Link4">
+         <origin xyz="0.0015086893210192037 -0.08692096745957083 0.00014268310941552745" rpy="1.7134688190037062 -1.5658743602600644 -0.10047550623191093"/>
+         <geometry>
+            <mesh filename="meshes/converted_armr_Link4_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="armr_joint4_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="armr_joint4">
+      <parent link="armr_Link3"/>
+      <child link="armr_joint4_jointbody"/>
+      <origin xyz="0.050001 -0.092358 0.00049537" rpy="0.0 1.5707963267948966 0.0"/>
+      <axis xyz="0.0 -1.0 0.0"/>
+      <limit lower="-1.1345" upper="1.1345" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="armr_joint4_offset">
+      <parent link="armr_joint4_jointbody"/>
+      <child link="armr_Link4"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="armr_Link5">
+      <inertial>
+         <origin xyz="0.04058691506049534 -0.07893306581001486 -0.002973610325991374" rpy="2.988078342829764 -1.532985157404287 -1.5675899252885128"/>
+         <mass value="3.097828221145348"/>
+         <inertia ixx="0.009428703970305439" iyy="0.006871101641133709" izz="0.0035199339322312356" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="armr_Link5">
+         <origin xyz="0.04058691506049534 -0.07893306581001486 -0.002973610325991374" rpy="2.98807834282977 -1.5329851574042868 -1.567589925288519"/>
+         <geometry>
+            <mesh filename="meshes/converted_armr_Link5_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="armr_joint5_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="armr_joint5">
+      <parent link="armr_Link4"/>
+      <child link="armr_joint5_jointbody"/>
+      <origin xyz="-0.043501 -0.16 0.0" rpy="0.0 0.0 0.0"/>
+      <axis xyz="-1.0 0.0 0.0"/>
+      <limit lower="-1.5707" upper="1.5707" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="armr_joint5_offset">
+      <parent link="armr_joint5_jointbody"/>
+      <child link="armr_Link5"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+  
+   <!-- Define the hand_tcp frame -->
+   <link name="handr_tcp">
+      <!-- <visual>
+         <geometry>
+            <sphere radius="0.005"/>
+         </geometry>
+         <material name="red">
+            <color rgba="0.8 0 0 1"/>
+         </material>
+      </visual> -->
+   </link>
+   <joint name="handr_tcp_joint" type="fixed">
+      <origin rpy="0 0 0" xyz="0.044 -0.208 -0.008"/>
+      <parent link="armr_Link5"/>
+      <child link="handr_tcp"/>
+   </joint>
+
+   <link name="handr_Link1">
+      <inertial>
+         <origin xyz="-0.0015488353527613919 -0.0012631763661895216 0.0035008328824133465" rpy="0.2805636180237743 -1.349886094493837 1.8266400369222797"/>
+         <mass value="0.09907171423180865"/>
+         <inertia ixx="3.324375189991825e-05" iyy="2.6720395529081545e-05" izz="8.302022482221262e-06" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="handr_Link1">
+         <origin xyz="-0.0015488353527613919 -0.0012631763661895216 0.0035008328824133465" rpy="0.28056361802377394 -1.3498860944938371 1.8266400369222802"/>
+         <geometry>
+            <mesh filename="meshes/converted_handr_Link1_625b57ff.obj"/>
+         </geometry>
+         <material name="steel">
+            <color rgba="0.5 0.5 0.55 1.0"/>
+         </material>
+      </visual>
+   </link>
+   <link name="handr_joint1_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="prismatic" name="handr_joint1">
+      <limit effort="100" lower="0" upper="0.025" velocity="0.2"/>
+      <parent link="armr_Link5"/>
+      <child link="handr_joint1_jointbody"/>
+       <axis xyz="-1 0 0"/>
+      <origin xyz="0.064 -0.17204 -0.015493" rpy="0.03768704783617659 0.0 0.0"/>
+   </joint>
+   <joint type="fixed" name="handr_joint1_offset">
+      <parent link="handr_joint1_jointbody"/>
+      <child link="handr_Link1"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="handr_Link2">
+      <inertial>
+         <origin xyz="0.0015488353527613923 -0.0012631763661895225 -0.0035008328824133452" rpy="2.8610290355660193 -1.349886094493837 -1.8266400369222802"/>
+         <mass value="0.09907171423180862"/>
+         <inertia ixx="3.3243751899918264e-05" iyy="2.6720395529081548e-05" izz="8.302022482221266e-06" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="handr_Link2">
+         <origin xyz="0.0015488353527613923 -0.0012631763661895225 -0.0035008328824133452" rpy="2.8610290355660193 -1.3498860944938371 -1.8266400369222802"/>
+         <geometry>
+            <mesh filename="meshes/converted_handr_Link2_625b57ff.obj"/>
+         </geometry>
+         <material name="steel">
+            <color rgba="0.5 0.5 0.55 1.0"/>
+         </material>
+      </visual>
+   </link>
+   <link name="handr_joint2_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="prismatic" name="handr_joint2">
+      <parent link="armr_Link5"/>
+      <child link="handr_joint2_jointbody"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0.023 -0.17272 0.0024942" rpy="0.03768704783617659 0.0 0.0"/>
+      <limit effort="100" lower="0.0" upper="0.025" velocity="0.2"/>
+   </joint>
+   <joint type="fixed" name="handr_joint2_offset">
+      <parent link="handr_joint2_jointbody"/>
+      <child link="handr_Link2"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="arml_Link">
+      <inertial>
+         <origin xyz="0.09372529480027876 -0.00034896464055210013 -0.00475905803117235" rpy="-3.075822002086883 -1.4973860229605367 -0.03856123973272352"/>
+         <mass value="6.244022566094783"/>
+         <inertia ixx="0.01640923735929756" iyy="0.014443179782072706" izz="0.008073495207217332" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="arml_Link">
+         <origin xyz="0.09372529480027876 -0.00034896464055210013 -0.00475905803117235" rpy="-3.075822002086883 -1.4973860229605367 -0.03856123973272352"/>
+         <geometry>
+            <mesh filename="meshes/converted_arml_Link_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="arml_joint9_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="arml_joint9">
+      <parent link="body_Link4"/>
+      <child link="arml_joint9_jointbody"/>
+      <origin xyz="0.1085 0.1275 0.0" rpy="0.0 0.0 0.0"/>
+      <axis xyz="-1.0 0.0 0.0"/>
+      <limit lower="-2.9671" upper="2.9671" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="arml_joint9_offset">
+      <parent link="arml_joint9_jointbody"/>
+      <child link="arml_Link"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="arml_Link1">
+      <inertial>
+         <origin xyz="0.0007460808179028048 -0.04551653126641586 -0.033169441878593664" rpy="1.8018497899578838 -0.004348472278946858 -0.006559461337062866"/>
+         <mass value="12.09828313246747"/>
+         <inertia ixx="0.03637804704088433" iyy="0.032361702384528075" izz="0.021428577354845182" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="arml_Link1">
+         <origin xyz="0.0007460808179028048 -0.04551653126641586 -0.033169441878593664" rpy="1.8018497899578838 -0.004348472278946858 -0.006559461337062866"/>
+         <geometry>
+            <mesh filename="meshes/converted_arml_Link1_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="arml_joint1_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="arml_joint1">
+      <parent link="arml_Link"/>
+      <child link="arml_joint1_jointbody"/>
+      <origin xyz="0.10794 0.0 0.039999" rpy="0.0 0.0 0.0"/>
+      <axis xyz="0.0 0.0 -1.0"/>
+      <limit lower="-3.1416" upper="0.1745" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="arml_joint1_offset">
+      <parent link="arml_joint1_jointbody"/>
+      <child link="arml_Link1"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="arml_Link2">
+      <inertial>
+         <origin xyz="0.0007086823877339435 -0.1182587954667873 1.3873620545109153e-05" rpy="1.5707759119974032 0.05681951836950927 0.008975802861299509"/>
+         <mass value="11.035910863393996"/>
+         <inertia ixx="0.051368790334073794" iyy="0.0512206081992723" izz="0.010689087942904312" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="arml_Link2">
+         <origin xyz="0.0007086823877339435 -0.1182587954667873 1.3873620545109153e-05" rpy="1.5707759119974036 0.05681951836950927 0.008975802861299509"/>
+         <geometry>
+            <mesh filename="meshes/converted_arml_Link2_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="arml_joint2_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="arml_joint2">
+      <parent link="arml_Link1"/>
+      <child link="arml_joint2_jointbody"/>
+      <origin xyz="6.2625e-05 -0.1255 -0.0415" rpy="0.0 0.0 0.0"/>
+      <axis xyz="0.0 1.0 0.0"/>
+      <limit lower="-1.1345" upper="1.1345" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="arml_joint2_offset">
+      <parent link="arml_joint2_jointbody"/>
+      <child link="arml_Link2"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="arml_Link3">
+      <inertial>
+         <origin xyz="-0.04308166750616438 -0.024465176683527406 0.000816616924894862" rpy="1.2707785184940008 -1.5579209067068864 0.10004716734527475"/>
+         <mass value="7.1909047306057285"/>
+         <inertia ixx="0.017307957928158077" iyy="0.013989719996178027" izz="0.011265765317156248" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="arml_Link3">
+         <origin xyz="-0.04308166750616438 -0.024465176683527406 0.000816616924894862" rpy="1.2707785184940075 -1.5579209067068867 0.10004716734526808"/>
+         <geometry>
+            <mesh filename="meshes/converted_arml_Link3_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="arml_joint3_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="arml_joint3">
+      <parent link="arml_Link2"/>
+      <child link="arml_joint3_jointbody"/>
+      <origin xyz="0.05 -0.1805 0.0" rpy="0.0 0.0 0.0"/>
+      <axis xyz="-1.0 0.0 0.0"/>
+      <limit lower="-0.1745" upper="1.9199" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="arml_joint3_offset">
+      <parent link="arml_joint3_jointbody"/>
+      <child link="arml_Link3"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="arml_Link4">
+      <inertial>
+         <origin xyz="-0.0015086893210192027 -0.0869209674595708 -0.00014268310941552284" rpy="1.4281238345860872 -1.5658743602600644 0.10047550623191104"/>
+         <mass value="6.422188052482629"/>
+         <inertia ixx="0.021116453233848895" iyy="0.02040786500739231" izz="0.005492748477294546" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="arml_Link4">
+         <origin xyz="-0.0015086893210192027 -0.0869209674595708 -0.00014268310941552284" rpy="1.4281238345860872 -1.5658743602600644 0.10047550623191104"/>
+         <geometry>
+            <mesh filename="meshes/converted_arml_Link4_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="arml_joint4_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="arml_joint4">
+      <parent link="arml_Link3"/>
+      <child link="arml_joint4_jointbody"/>
+      <origin xyz="-0.050001 -0.092358 -0.00049537" rpy="0.0 0.0 0.0"/>
+      <axis xyz="0.0 1.0 0.0"/>
+      <limit lower="-1.1345" upper="1.1345" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="arml_joint4_offset">
+      <parent link="arml_joint4_jointbody"/>
+      <child link="arml_Link4"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="arml_Link5">
+      <inertial>
+         <origin xyz="-0.04058691506049534 -0.07893306581001486 0.002973610325991374" rpy="0.1535143107600293 -1.532985157404287 1.5675899252885128"/>
+         <mass value="3.097828221145348"/>
+         <inertia ixx="0.009428703970305439" iyy="0.006871101641133709" izz="0.0035199339322312356" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="arml_Link5">
+         <origin xyz="-0.04058691506049534 -0.07893306581001486 0.002973610325991374" rpy="0.15351431076002298 -1.5329851574042868 1.5675899252885193"/>
+         <geometry>
+            <mesh filename="meshes/converted_arml_Link5_cad1eeff.obj"/>
+         </geometry>
+      </visual>
+   </link>
+   <link name="arml_joint5_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="revolute" name="arml_joint5">
+      <parent link="arml_Link4"/>
+      <child link="arml_joint5_jointbody"/>
+      <origin xyz="0.043501 -0.16 0.0" rpy="0.0 0.0 0.0"/>
+      <axis xyz="-1.0 0.0 0.0"/>
+      <limit lower="-1.5707" upper="1.5707" effort="100" velocity="100"/>
+   </joint>
+   <joint type="fixed" name="arml_joint5_offset">
+      <parent link="arml_joint5_jointbody"/>
+      <child link="arml_Link5"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+
+   <!-- Define the hand_tcp frame -->
+   <link name="handl_tcp">
+      <visual>
+         <geometry>
+            <sphere radius="0.005"/>
+         </geometry>
+         <material name="red">
+            <color rgba="0.8 0 0 1"/>
+         </material>
+      </visual>
+   </link>
+   <joint name="handl_tcp_joint" type="fixed">
+      <origin rpy="0 0 0" xyz="-0.044 -0.208 0.008"/>
+      <parent link="arml_Link5"/>
+      <child link="handl_tcp"/>
+   </joint>
+
+
+   <link name="handl_Link1">
+      <inertial>
+         <origin xyz="0.0015488353527613912 -0.00126317636618952 -0.003500832882413348" rpy="2.8610290355660184 -1.349886094493837 -1.8266400369222793"/>
+         <mass value="0.09907171423180867"/>
+         <inertia ixx="3.324375189991826e-05" iyy="2.6720395529081545e-05" izz="8.302022482221264e-06" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="handl_Link1">
+         <origin xyz="0.0015488353527613912 -0.00126317636618952 -0.003500832882413348" rpy="2.8610290355660197 -1.349886094493837 -1.8266400369222797"/>
+         <geometry>
+            <mesh filename="meshes/converted_handl_Link1_625b57ff.obj"/>
+         </geometry>
+         <material name="steel">
+            <color rgba="0.5 0.5 0.55 1.0"/>
+         </material>
+      </visual>
+   </link>
+
+   <link name="handl_joint1_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="prismatic" name="handl_joint1">
+      <parent link="arml_Link5"/>
+      <child link="handl_joint1_jointbody"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="-0.064 -0.17204 0.015493" rpy="-0.03768704783617659 0.0 0.0"/>
+      <limit effort="100" lower="0.0" upper="0.025" velocity="0.2"/>
+   </joint>
+   <joint type="fixed" name="handl_joint1_offset">
+      <parent link="handl_joint1_jointbody"/>
+      <child link="handl_Link1"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+   <link name="handl_Link2">
+      <inertial>
+         <origin xyz="-0.0015488353527613947 -0.0012631763661895212 0.0035008328824133483" rpy="0.2805636180237745 -1.349886094493837 1.826640036922279"/>
+         <mass value="0.09907171423180866"/>
+         <inertia ixx="3.324375189991825e-05" iyy="2.6720395529081538e-05" izz="8.302022482221266e-06" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <visual name="handl_Link2">
+         <origin xyz="-0.0015488353527613947 -0.0012631763661895212 0.0035008328824133483" rpy="0.2805636180237737 -1.349886094493837 1.8266400369222797"/>
+         <geometry>
+            <mesh filename="meshes/converted_handl_Link2_625b57ff.obj"/>
+         </geometry>
+         <material name="steel">
+            <color rgba="0.5 0.5 0.55 1.0"/>
+         </material>
+      </visual>
+   </link>
+   <link name="handl_joint2_jointbody">
+      <inertial>
+         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+         <mass value="0.001"/>
+         <inertia ixx="1e-09" iyy="1e-09" izz="1e-09" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+   </link>
+   <joint type="prismatic" name="handl_joint2">
+      <parent link="arml_Link5"/>
+      <child link="handl_joint2_jointbody"/>
+      <axis xyz="-1 0 0"/>
+      <origin xyz="-0.023 -0.17272 -0.0024942" rpy="-0.03768704783617659 0.0 0.0"/>
+      <limit effort="100" lower="0.0" upper="0.025" velocity="0.2"/>
+   </joint>
+   <joint type="fixed" name="handl_joint2_offset">
+      <parent link="handl_joint2_jointbody"/>
+      <child link="handl_Link2"/>
+      <origin xyz="-0.0 -0.0 -0.0" rpy="0.0 0.0 0.0"/>
+   </joint>
+
+
+
+
+   <!--  camera mount-->
+   <!-- <sensor name="my_camera_sensor" update_rate="20">
+      <parent link="body_Link4"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <camera>
+         <image width="640" height="480" hfov="1.5708" format="RGB8" near="0.01" far="50.0"/>
+      </camera>
+   </sensor> -->
+
+   <joint name="head_camera_base_joint" type="fixed">
+      <!-- <origin rpy="0 0 0" xyz="0 0.5 0.2"/> -->
+      <origin xyz="0 0.4 0.2" rpy="0 2.1 1.5707963267948966"/>
+      <parent link="body_Link4"/>
+      <child link="head_camera_base_link"/>
+   </joint>
+   <!-- <joint type="fixed" name="webcam_joint_world">
+      <parent link="world"/>
+      <child link="camera_base_link"/>
+      <origin xyz="0 -0.3 1.5" rpy="0 0.785 1.5707963267948966"/>
+   </joint> -->
+   <link name="head_camera_base_link"/>
+   <joint name="head_camera_joint" type="fixed">
+      <origin rpy="0 1.0707963267948966 0" xyz="0 0 0"/>
+      <!-- <origin rpy="0 0 0" xyz="0 0 0"/> -->
+      <parent link="head_camera_base_link"/>
+      <child link="head_camera_link"/>
+   </joint>
+   <link name="head_camera_link">
+      <visual>
+         <geometry>
+            <box size="0.0215 0.041 0.041"/>
+         </geometry>
+         <material name="aluminum">
+            <color rgba="0.8 0.0 0.0 1.0"/>
+         </material>
+      </visual>
+      <collision>
+         <geometry>
+            <box size="0.041 0.041 0.041"/>
+         </geometry>
+      </collision>
+      <inertial>
+         <mass value="0.564"/>
+         <inertia ixx="0.003881243" ixy="0.0" ixz="0.0" iyy="0.000498940" iyz="0.0" izz="0.003879257"/>
+      </inertial>
+   </link>
+
+   <joint name="handl_camera_base_joint" type="fixed">
+      <origin xyz="-0.04 -0.1 0.1" rpy="0 1.7 1.5707963267948966"/>
+      <parent link="arml_Link5"/>
+      <child link="handl_camera_base_link"/>
+   </joint>
+   <link name="handl_camera_base_link"/>
+   <joint name="handl_camera_joint" type="fixed">
+      <origin rpy="0 1.0707963267948966 0" xyz="0 0 0"/>
+      <parent link="handl_camera_base_link"/>
+      <child link="handl_camera_link"/>
+   </joint>
+   <link name="handl_camera_link">
+      <visual>
+         <geometry>
+            <box size="0.0215 0.041 0.041"/>
+         </geometry>
+         <material name="aluminum">
+            <color rgba="0.8 0.0 0.0 1.0"/>
+         </material>
+      </visual>
+      <collision>
+         <geometry>
+            <box size="0.041 0.041 0.041"/>
+         </geometry>
+      </collision>
+      <inertial>
+         <mass value="0.564"/>
+         <inertia ixx="0.003881243" ixy="0.0" ixz="0.0" iyy="0.000498940" iyz="0.0" izz="0.003879257"/>
+      </inertial>
+   </link>
+</robot>
