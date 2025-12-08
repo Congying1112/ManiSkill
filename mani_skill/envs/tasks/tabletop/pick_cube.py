@@ -40,6 +40,7 @@ class PickCubeEnv(BaseEnv):
         "xarm6_robotiq",
         "so100",
         "widowxai",
+        "rj2506"
     ]
     agent: Union[Panda, Fetch, XArm6Robotiq, SO100, WidowXAI]
     goal_thresh = 0.025
@@ -112,9 +113,8 @@ class PickCubeEnv(BaseEnv):
                 torch.rand((b, 2)) * self.cube_spawn_half_size * 2
                 - self.cube_spawn_half_size
             )
-            xyz[:, 0] += self.cube_spawn_center[0]
+            xyz[:, 0] += self.cube_spawn_center[0] - 0.4
             xyz[:, 1] += self.cube_spawn_center[1]
-
             xyz[:, 2] = self.cube_half_size
             qs = randomization.random_quaternions(b, lock_x=True, lock_y=True)
             self.cube.set_pose(Pose.create_from_pq(xyz, qs))
@@ -124,7 +124,7 @@ class PickCubeEnv(BaseEnv):
                 torch.rand((b, 2)) * self.cube_spawn_half_size * 2
                 - self.cube_spawn_half_size
             )
-            goal_xyz[:, 0] += self.cube_spawn_center[0]
+            goal_xyz[:, 0] += self.cube_spawn_center[0] - 0.4
             goal_xyz[:, 1] += self.cube_spawn_center[1]
             goal_xyz[:, 2] = torch.rand((b)) * self.max_goal_height + xyz[:, 2]
             self.goal_site.set_pose(Pose.create_from_pq(goal_xyz))
@@ -212,5 +212,15 @@ class PickCubeWidowXAIEnv(PickCubeEnv):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, robot_uids="widowxai", **kwargs)
 
+PickCubeWidowXAIEnv.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="widowxai")
 
-PickCubeWidowXAIEnv.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="WidowXAI")
+
+@register_env("PickCubeRJ2506-v1", max_episode_steps=50)
+class PickCubeRJ2506Env(PickCubeEnv):
+    _sample_video_link = "https://github.com/haosulab/ManiSkill/raw/main/figures/environment_demos/PickCubeWidowXAI-v1_rt.mp4"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, robot_uids="rj2506", **kwargs)
+
+PickCubeRJ2506Env.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="rj2506")
+
