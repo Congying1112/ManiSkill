@@ -54,6 +54,8 @@ class Args:
     # Algorithm specific arguments
     env_id: str = "PickCube-v1"
     """the id of the environment"""
+    robot_uids: str = "fetch"
+    """the id of the robot agent"""
     include_state: bool = True
     """whether to include state information in observations"""
     total_timesteps: int = 10000000
@@ -307,6 +309,10 @@ if __name__ == "__main__":
     env_kwargs = dict(obs_mode="rgb", render_mode=args.render_mode, sim_backend="physx_cuda")
     if args.control_mode is not None:
         env_kwargs["control_mode"] = args.control_mode
+    env_kwargs["robot_uids"] = args.robot_uids
+    
+    print(f"[USING]robot {args.robot_uids} for task {args.env_id}")
+    
     eval_envs = gym.make(args.env_id, num_envs=args.num_eval_envs, reconfiguration_freq=args.eval_reconfiguration_freq, **env_kwargs)
     envs = gym.make(args.env_id, num_envs=args.num_envs if not args.evaluate else 1, reconfiguration_freq=args.reconfiguration_freq, **env_kwargs)
 

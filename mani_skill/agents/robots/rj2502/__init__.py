@@ -1,0 +1,1 @@
+from .rj2502 import *

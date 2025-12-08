@@ -50,7 +50,7 @@ class PushCubeEnv(BaseEnv):
 
     _sample_video_link = "https://github.com/haosulab/ManiSkill/raw/main/figures/environment_demos/PushCube-v1_rt.mp4"
 
-    SUPPORTED_ROBOTS = ["panda", "fetch"]
+    SUPPORTED_ROBOTS = ["panda", "fetch", "rj2506"]
 
     # Specify some supported robot types
     agent: Union[Panda, Fetch]
@@ -155,6 +155,7 @@ class PushCubeEnv(BaseEnv):
             xyz = torch.zeros((b, 3))
             xyz[..., :2] = torch.rand((b, 2)) * 0.2 - 0.1
             xyz[..., 2] = self.cube_half_size
+            xyz[..., 0] -= 0.4
             q = [1, 0, 0, 0]
             # we can then create a pose object using Pose.create_from_pq to then set the cube pose with. Note that even though our quaternion
             # is not batched, Pose.create_from_pq will automatically batch p or q accordingly
