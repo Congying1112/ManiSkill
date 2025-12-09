@@ -293,7 +293,7 @@ if __name__ == "__main__":
     args.num_iterations = args.total_timesteps // args.batch_size
     if args.exp_name is None:
         args.exp_name = os.path.basename(__file__)[: -len(".py")]
-        run_name = f"{args.env_id}__{args.exp_name}__{args.seed}__{int(time.time())}"
+        run_name = f"{args.env_id}_{args.robot_uids}_{args.exp_name}_{args.seed}_{int(time.time())}"
     else:
         run_name = args.exp_name
 
@@ -312,7 +312,6 @@ if __name__ == "__main__":
     env_kwargs["robot_uids"] = args.robot_uids
     
     print(f"[USING]robot {args.robot_uids} for task {args.env_id}")
-    
     eval_envs = gym.make(args.env_id, num_envs=args.num_eval_envs, reconfiguration_freq=args.eval_reconfiguration_freq, **env_kwargs)
     envs = gym.make(args.env_id, num_envs=args.num_envs if not args.evaluate else 1, reconfiguration_freq=args.reconfiguration_freq, **env_kwargs)
 
