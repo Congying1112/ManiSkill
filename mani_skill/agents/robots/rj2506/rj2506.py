@@ -94,6 +94,18 @@ class RJ2506(BaseAgent):
                 far=100,
                 mount=self.robot.links_map["left_hand_front_cam"],
             ),
+            CameraConfig(
+                uid="left_hand_back_cam",
+                pose=sapien.Pose(p=[0, 0, 0], q=euler2quat(0, 0, 0)),
+                # pose=sapien.Pose(p=[0, 0, 0], q=euler2quat(1.57, 0, 0)),
+                # width=3840, height=2160,
+                # width=256, height=256,
+                width=128, height=128,
+                fov=110 * np.pi / 180,
+                near=0.01,
+                far=100,
+                mount=self.robot.links_map["left_hand_back_cam"],
+            ),
             # CameraConfig(
             #     uid="right_hand_front_cam",
             #     pose=sapien.Pose(p=[0, 0, 0], q=euler2quat(0, 0, 0)),
