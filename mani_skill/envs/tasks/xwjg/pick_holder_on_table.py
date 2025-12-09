@@ -158,13 +158,6 @@ class PickHolderOnTableEnv(BaseEnv):
         super().__init__(*args, robot_uids=robot_uids, **kwargs)
 
     @property
-    def _default_sensor_configs(self):
-        pose = sapien_utils.look_at(
-            eye=self.sensor_cam_eye_pos, target=self.sensor_cam_target_pos
-        )
-        return [CameraConfig("base_camera", pose, 128, 128, np.pi / 2, 0.01, 100)]
-
-    @property
     def _default_human_render_camera_configs(self):
         pose = sapien_utils.look_at(
             eye=self.human_cam_eye_pos, target=self.human_cam_target_pos
@@ -315,17 +308,14 @@ class PickHolderOnTableEnv(BaseEnv):
         euler_angles = quat2euler(pose.q[0])
         # print("Euler angles (radians):", euler_angles)
         # print("Euler angles (degrees):", np.degrees(euler_angles))
-        return pose, np.degrees(euler_angles)
+        return pose, np.degrees(euler_angles)    
 
-    def compute_dense_reward1(self, obs: Any, action: torch.Tensor, info: dict):
+    def compute_dense_reward(self, obs: Any, action: torch.Tensor, info: dict):
         tcp_to_obj_dist = torch.linalg.norm(
             self.holder.pose.p - self.agent.tcp_pose.p, axis=1
         )
         reaching_reward = 1 - torch.tanh(5 * tcp_to_obj_dist)
         reward = reaching_reward
-        info1 = dict()
-        info1["tcp_to_obj_dist"] = tcp_to_obj_dist
-        info1["reaching_reward"] = reaching_reward
 
         is_grasped = info["is_grasped"]
         reward += is_grasped
@@ -345,10 +335,9 @@ class PickHolderOnTableEnv(BaseEnv):
         reward += static_reward * info["is_obj_placed"]
 
         reward[info["success"]] = 5
-        info1["reward"] = reward
-        return info1
+        return reward
     
-    def compute_dense_reward(self, obs: Any, action: torch.Tensor, info: dict):
+    def compute_dense_reward1(self, obs: Any, action: torch.Tensor, info: dict):
 
         info["reward1"] = self.compute_dense_reward1(obs, action, info)
 

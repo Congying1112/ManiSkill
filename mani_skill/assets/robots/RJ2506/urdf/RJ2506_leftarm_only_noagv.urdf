@@ -668,8 +668,9 @@
       effort="0"
       velocity="0" />
   </joint>
-  <link
-    name="left_hand_front_cam">
+
+
+  <link name="left_hand_front_cam">
     <inertial>
       <origin
         xyz="-0.0239311652691113 -0.00851339259041423 0"
@@ -694,10 +695,6 @@
       <material name="aluminum">
         <color rgba="0.8 0.0 0.0 1.0"/>
       </material>
-      <!-- <geometry>
-        <mesh
-          filename="package://RJ2506/meshes/left_hand_front_cam.STL" />
-      </geometry> -->
       <material
         name="">
         <color
@@ -714,21 +711,13 @@
       <material name="aluminum">
         <color rgba="0.8 0.0 0.0 1.0"/>
       </material>
-      <!-- <geometry>
-        <mesh
-          filename="package://RJ2506/meshes/left_hand_front_cam.STL" />
-      </geometry> -->
     </collision>
   </link>
-  <joint
-    name="left_hand_front_cam_joint"
+  <joint name="left_hand_front_cam_joint"
     type="fixed">
     <origin
       xyz="-0.00590000000000057 0 0.129655988461576"
       rpy="0 -1.04719755119659 0" />
-    <!-- <origin
-      xyz="-0.00590000000000057 0 0.129655988461576"
-      rpy="1.57079632679138 -1.04719755119659 0" /> -->
     <parent
       link="left_hand_base" />
     <child
@@ -736,6 +725,67 @@
     <axis
       xyz="0 0 0" />
   </joint>
+
+  <link name="left_hand_back_cam">
+    <inertial>
+      <origin
+        xyz="-0.0239311652691113 -0.00851339259041423 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.0958667621444379" />
+      <inertia
+        ixx="2.42383827887961E-05"
+        ixy="-1.00382415725035E-06"
+        ixz="-3.91752738105114E-21"
+        iyy="2.74825146334872E-05"
+        iyz="-4.2351647362715E-21"
+        izz="2.3346676346651E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <box size="0.0215 0.041 0.041"/>
+      </geometry>
+      <material name="aluminum">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+      </material>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <box size="0.0215 0.041 0.041"/>
+      </geometry>
+      <material name="aluminum">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+      </material>
+    </collision>
+  </link>
+  <joint name="left_hand_back_cam_joint"
+    type="fixed">
+    <!-- <origin
+      xyz="0.09990000000000057 0 0.129655988461576"
+      rpy="0 1.04719755119659 0" /> -->
+    <origin
+      xyz="0.09990000000000057 0 0.129655988461576"
+      rpy="3.1415926 -2.094395102 0" />
+    <parent
+      link="left_hand_base" />
+    <child
+      link="left_hand_back_cam" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  
+  
   <link
     name="right_arm_link0">
     <inertial>
