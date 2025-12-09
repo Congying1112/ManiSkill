@@ -94,6 +94,7 @@ ROBOT_CONFIGS = {
             0.6,
         ],  # human cam is the camera used for human rendering (i.e. eval videos)
         "human_cam_target_pos": [0.0, 0.0, 0.35],
+        "holder_pos": [0, 0, 0],
     },
     "fetch": {
         "agent_pos": [-0.2, -0.6, 0],
@@ -107,6 +108,21 @@ ROBOT_CONFIGS = {
         "sensor_cam_target_pos": [-0.1, 0, 0.1],
         "human_cam_eye_pos": [0.6, 0.7, 0.6],
         "human_cam_target_pos": [0.0, 0.0, 0.35],
+        "holder_pos": [0, 0, 0],
+    },
+    "rj2506": {
+        "agent_pos": [0, 0, 0],
+        "holder_half_size": 0.1,
+        "goal_thresh": 0.025,
+        "holder_spawn_half_size": 0.1,
+        "holder_spawn_center": (0, 0),
+        "max_goal_height": 0.3,
+        "pickup_height": 0.3,
+        "sensor_cam_eye_pos": [0.3, 0, 0.6],
+        "sensor_cam_target_pos": [-0.1, 0, 0.1],
+        "human_cam_eye_pos": [0.6, 0.7, 0.6],
+        "human_cam_target_pos": [0.0, 0.0, 0.35],
+        "holder_pos": [-0.4, 0, 0],
     },
 }
 
@@ -118,9 +134,7 @@ class PickHolderOnTableEnv(BaseEnv):
     SUPPORTED_ROBOTS = [
         "panda_wristcam",
         "fetch",
-        "xarm6_robotiq",
-        "so100",
-        "widowxai",
+        "rj2506",
     ]
     agent: Union[PandaWristCam, Fetch, XArm6Robotiq, SO100, WidowXAI]
     goal_thresh = 0.025
@@ -139,6 +153,8 @@ class PickHolderOnTableEnv(BaseEnv):
         self.sensor_cam_target_pos = robot_cfg["sensor_cam_target_pos"]
         self.human_cam_eye_pos = robot_cfg["human_cam_eye_pos"]
         self.human_cam_target_pos = robot_cfg["human_cam_target_pos"]
+
+        self.holder_pos = robot_cfg.get("holder_pos", [0, 0, 0])
         super().__init__(*args, robot_uids=robot_uids, **kwargs)
 
     @property
@@ -156,7 +172,7 @@ class PickHolderOnTableEnv(BaseEnv):
         return CameraConfig("render_camera", pose, 512, 512, 1, 0.01, 100)
 
     def _load_agent(self, options: dict):
-        super()._load_agent(options, sapien.Pose(p=[-0.615, 0, 0]))
+        super()._load_agent(options, sapien.Pose(q=euler2quat(0, 0, np.pi/2), p=[-1.2, 0, -0.8]))
 
     
     def create_anchor_system(self):
@@ -249,9 +265,9 @@ class PickHolderOnTableEnv(BaseEnv):
                 torch.rand((b, 2)) * self.target_spawn_half_size * 2
                 - self.target_spawn_half_size
             )
-            xyz[:, 0] += self.target_spawn_center[0]
-            xyz[:, 1] += self.target_spawn_center[1]
-            xyz[:, 2] = self.target_half_size
+            xyz[:, 0] += self.target_spawn_center[0] + self.holder_pos[0]
+            xyz[:, 1] += self.target_spawn_center[1] + self.holder_pos[1]
+            xyz[:, 2] = self.target_half_size + self.holder_pos[2]
             qs = randomization.random_quaternions(b, lock_x=True, lock_y=True)
             self.holder.set_pose(Pose.create_from_pq(xyz, qs))
 
@@ -260,9 +276,9 @@ class PickHolderOnTableEnv(BaseEnv):
                 torch.rand((b, 2)) * self.target_spawn_half_size * 2
                 - self.target_spawn_half_size
             )
-            goal_xyz[:, 0] += self.target_spawn_center[0]
-            goal_xyz[:, 1] += self.target_spawn_center[1]
-            goal_xyz[:, 2] = torch.rand((b)) * self.max_goal_height + xyz[:, 2]
+            goal_xyz[:, 0] += self.target_spawn_center[0] + self.holder_pos[0]
+            goal_xyz[:, 1] += self.target_spawn_center[1] + self.holder_pos[1]
+            goal_xyz[:, 2] = torch.rand((b)) * self.max_goal_height + xyz[:, 2] + self.holder_pos[2]
             self.goal_site.set_pose(Pose.create_from_pq(goal_xyz))
 
     def _get_obs_extra(self, info: dict):
@@ -301,7 +317,41 @@ class PickHolderOnTableEnv(BaseEnv):
         # print("Euler angles (degrees):", np.degrees(euler_angles))
         return pose, np.degrees(euler_angles)
 
+    def compute_dense_reward1(self, obs: Any, action: torch.Tensor, info: dict):
+        tcp_to_obj_dist = torch.linalg.norm(
+            self.holder.pose.p - self.agent.tcp_pose.p, axis=1
+        )
+        reaching_reward = 1 - torch.tanh(5 * tcp_to_obj_dist)
+        reward = reaching_reward
+        info1 = dict()
+        info1["tcp_to_obj_dist"] = tcp_to_obj_dist
+        info1["reaching_reward"] = reaching_reward
+
+        is_grasped = info["is_grasped"]
+        reward += is_grasped
+
+        obj_to_goal_dist = torch.linalg.norm(
+            self.goal_site.pose.p - self.holder.pose.p, axis=1
+        )
+        place_reward = 1 - torch.tanh(5 * obj_to_goal_dist)
+        reward += place_reward * is_grasped
+
+        qvel = self.agent.robot.get_qvel()
+        if self.robot_uids in ["panda", "widowxai"]:
+            qvel = qvel[..., :-2]
+        elif self.robot_uids == "so100":
+            qvel = qvel[..., :-1]
+        static_reward = 1 - torch.tanh(5 * torch.linalg.norm(qvel, axis=1))
+        reward += static_reward * info["is_obj_placed"]
+
+        reward[info["success"]] = 5
+        info1["reward"] = reward
+        return info1
+    
     def compute_dense_reward(self, obs: Any, action: torch.Tensor, info: dict):
+
+        info["reward1"] = self.compute_dense_reward1(obs, action, info)
+
         info["reward"] = dict()
 
         # 夹爪位姿与锚点位姿对齐奖励
@@ -352,10 +402,10 @@ class PickHolderOnTableEnv(BaseEnv):
         # reward = reach_to_anchor_reward + grapper_reward
 
         # 到位前闭合爪子惩罚
-        reached_to_anchor = (tcp_to_anchor_dist_norm < 0.015) & (delta_angle_norm < 0.07)
-        premature_grasp_penalty = -torch.where(reached_to_anchor, 0., (self.agent.grasper_angle() < 0.11).float())
-        reward += premature_grasp_penalty
-        info["reward"]["premature_grasp_penalty"] = premature_grasp_penalty
+        # reached_to_anchor = (tcp_to_anchor_dist_norm < 0.015) & (delta_angle_norm < 0.07)
+        # premature_grasp_penalty = -torch.where(reached_to_anchor, 0., (self.agent.grasper_angle() < 0.11).float())
+        # reward += premature_grasp_penalty
+        # info["reward"]["premature_grasp_penalty"] = premature_grasp_penalty
 
         # 物体抓取奖励
         is_grasped = info["is_grasped"]
