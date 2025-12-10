@@ -28,3 +28,4 @@ from .xarm import XArm7Ability
 from .xarm6 import *
 from .rj2502 import *
 from .rj2506 import *
+from .xlerobot import *
