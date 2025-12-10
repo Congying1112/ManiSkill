@@ -268,7 +268,7 @@ if __name__ == "__main__":
     cumulative_times = defaultdict(float)
     eval_metrics_total = defaultdict(list)
     for i in range(1, args.num_evals + 1):
-        print(f"Epoch: {i}, global_step={global_step}")
+        print(f"Evaluation: {i}")
         agent.eval()
         print("Evaluating")
         stime = time.perf_counter()
