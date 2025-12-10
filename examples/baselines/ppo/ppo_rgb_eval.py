@@ -266,7 +266,7 @@ if __name__ == "__main__":
     agent.load_state_dict(torch.load(args.checkpoint))
 
     cumulative_times = defaultdict(float)
-
+    eval_metrics_total = defaultdict(list)
     for i in range(1, args.num_evals + 1):
         print(f"Epoch: {i}, global_step={global_step}")
         agent.eval()
@@ -283,11 +283,15 @@ if __name__ == "__main__":
                     num_episodes += mask.sum()
                     for k, v in eval_infos["final_info"]["episode"].items():
                         eval_metrics[k].append(v)
+                        eval_metrics_total[k].append(v)
         print(f"Evaluated {args.num_eval_steps * args.num_eval_envs} steps resulting in {num_episodes} episodes")
         for k, v in eval_metrics.items():
             mean = torch.stack(v).float().mean()
             print(f"eval_{k}_mean={mean}")
         eval_time = time.perf_counter() - stime
         print(f"eval_{k}_time={eval_time}")
-
+    print(f"Final evaluation over total {args.num_evals * args.num_eval_envs} episodes:")
+    for k, v in eval_metrics_total.items():
+        mean = torch.stack(v).float().mean()
+        print(f"eval_{k}_mean={mean}")
     eval_envs.close()
