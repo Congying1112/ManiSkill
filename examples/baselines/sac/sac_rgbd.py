@@ -59,6 +59,8 @@ class Args:
     # Environment specific arguments
     env_id: str = "PickCube-v1"
     """the id of the environment"""
+    robot_uids: str = "fetch"
+    """the id of the robot agent"""
     obs_mode: str = "rgb"
     """the observation mode to use"""
     include_state: bool = True
@@ -479,7 +481,8 @@ if __name__ == "__main__":
     args.steps_per_env = args.training_freq // args.num_envs
     if args.exp_name is None:
         args.exp_name = os.path.basename(__file__)[: -len(".py")]
-        run_name = f"{args.env_id}__{args.exp_name}__{args.seed}__{int(time.time())}"
+        # run_name = f"{args.env_id}__{args.exp_name}__{args.seed}__{int(time.time())}"
+        run_name = f"{args.env_id}_{args.robot_uids}_{args.exp_name}_{args.seed}_{int(time.time())}"
     else:
         run_name = args.exp_name
 
@@ -500,6 +503,8 @@ if __name__ == "__main__":
         env_kwargs["sensor_configs"]["width"] = args.camera_width
     if args.camera_height is not None:
         env_kwargs["sensor_configs"]["height"] = args.camera_height
+    env_kwargs["robot_uids"] = args.robot_uids
+    print(f"[USING]robot {args.robot_uids} for task {args.env_id}")
     envs = gym.make(args.env_id, num_envs=args.num_envs if not args.evaluate else 1, reconfiguration_freq=args.reconfiguration_freq, **env_kwargs)
     eval_envs = gym.make(args.env_id, num_envs=args.num_eval_envs, reconfiguration_freq=args.eval_reconfiguration_freq, human_render_camera_configs=dict(shader_pack="default"), **env_kwargs)
 
