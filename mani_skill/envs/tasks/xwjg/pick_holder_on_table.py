@@ -127,7 +127,7 @@ ROBOT_CONFIGS = {
 }
 
 
-@register_env("PickHolderOnTable-v1", max_episode_steps=150)
+@register_env("PickHolderOnTable-v1", max_episode_steps=100)
 class PickHolderOnTableEnv(BaseEnv):
 
     _sample_video_link = "https://github.com/haosulab/ManiSkill/raw/main/figures/environment_demos/PickHolderOnTable-v1_rt.mp4"
@@ -430,4 +430,4 @@ class PickHolderOnTableEnv(BaseEnv):
         return self.compute_dense_reward(obs=obs, action=action, info=info) / 5
 
 
-PickHolderOnTableEnv.__doc__ = PICK_HOLDER_ON_TABLE_DOC_STRING.format(robot_id="PandaWristCam")
+PickHolderOnTableEnv.__doc__ = PICK_HOLDER_ON_TABLE_DOC_STRING.format(robot_id="rj2506")
