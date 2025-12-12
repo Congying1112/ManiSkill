@@ -41,8 +41,6 @@ class Args:
     """the wandb's project name"""
     wandb_entity: Optional[str] = None
     """the entity (team) of wandb's project"""
-    wandb_group: str = "SAC"
-    """the group of the run for wandb"""
     capture_video: bool = True
     """whether to capture videos of the agent performances (check out `videos` folder)"""
     save_trajectory: bool = False
@@ -538,13 +536,13 @@ if __name__ == "__main__":
             config["env_cfg"] = dict(**env_kwargs, num_envs=args.num_envs, env_id=args.env_id, reward_mode="normalized_dense", env_horizon=max_episode_steps, partial_reset=args.partial_reset)
             config["eval_env_cfg"] = dict(**env_kwargs, num_envs=args.num_eval_envs, env_id=args.env_id, reward_mode="normalized_dense", env_horizon=max_episode_steps, partial_reset=False)
             wandb.init(
-                project=args.wandb_project_name,
+                project=args.wandb_project_name+"-"+args.env_id,
                 entity=args.wandb_entity,
-                sync_tensorboard=False,
+                sync_tensorboard=True,
                 config=config,
                 name=run_name,
                 save_code=True,
-                group=args.wandb_group,
+                group="SAC",
                 tags=["sac", "walltime_efficient"]
             )
         writer = SummaryWriter(f"runs/{run_name}")

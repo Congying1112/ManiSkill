@@ -453,7 +453,7 @@ if __name__ == "__main__":
         config = vars(args)
         config["eval_env_cfg"] = dict(**env_kwargs, num_envs=args.num_eval_envs, env_id=args.env_id, env_horizon=args.max_episode_steps)
         wandb.init(
-            project=args.wandb_project_name,
+            project=args.wandb_project_name+"-"+args.env_id,
             entity=args.wandb_entity,
             sync_tensorboard=True,
             config=config,

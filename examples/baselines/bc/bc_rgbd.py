@@ -394,7 +394,7 @@ if __name__ == "__main__":
             env_horizon=gym_utils.find_max_episode_steps_value(envs),
         )
         wandb.init(
-            project=args.wandb_project_name,
+            project=args.wandb_project_name+"-"+args.env_id,
             entity=args.wandb_entity,
             sync_tensorboard=True,
             config=config,

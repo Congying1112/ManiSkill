@@ -38,8 +38,6 @@ class Args:
     """the wandb's project name"""
     wandb_entity: Optional[str] = None
     """the entity (team) of wandb's project"""
-    wandb_group: str = "PPO"
-    """the group of the run for wandb"""
     capture_video: bool = True
     """whether to capture videos of the agent performances (check out `videos` folder)"""
     save_model: bool = True
@@ -347,11 +345,11 @@ if __name__ == "__main__":
             wandb.init(
                 project=args.wandb_project_name+"-"+args.env_id,
                 entity=args.wandb_entity,
-                sync_tensorboard=False,
+                sync_tensorboard=True,
                 config=config,
                 name=run_name,
                 save_code=True,
-                group=args.wandb_group,
+                group="PPO",
                 tags=["ppo", "walltime_efficient"]
             )
         writer = SummaryWriter(f"runs/{run_name}")
