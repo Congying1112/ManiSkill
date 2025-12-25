@@ -68,7 +68,8 @@ class TableSceneBuilder(SceneBuilder):
         # table_height = 0.9196429
         b = len(env_idx)
         self.table.set_pose(
-            sapien.Pose(p=[-0.12, 0, -0.9196429], q=euler2quat(0, 0, np.pi / 2))
+            sapien.Pose(p=[-0.12, 0, -0.9196429],
+                        q=euler2quat(0, 0, np.pi / 2))
         )
         if self.env.robot_uids == "panda":
             qpos = np.array(
@@ -124,7 +125,7 @@ class TableSceneBuilder(SceneBuilder):
             qpos[:, -2:] = 0.04
             self.env.agent.reset(qpos)
             self.env.agent.robot.set_pose(sapien.Pose([-0.615, 0, 0]))
-        elif self.env.robot_uids in ["xarm6_allegro_left","xarm6_allegro_right","xarm6_robotiq","xarm6_nogripper",]:
+        elif self.env.robot_uids in ["xarm6_allegro_left", "xarm6_allegro_right", "xarm6_robotiq", "xarm6_nogripper",]:
             qpos = self.env.agent.keyframes["rest"].qpos
             qpos = (
                 self.env._episode_rng.normal(
@@ -155,7 +156,8 @@ class TableSceneBuilder(SceneBuilder):
                 ]
             )
             self.env.agent.reset(qpos)
-            self.env.agent.robot.set_pose(sapien.Pose([-1.05, 0, -self.table_height]))
+            self.env.agent.robot.set_pose(
+                sapien.Pose([-1.05, 0, -self.table_height]))
 
             self.ground.set_collision_group_bit(
                 group=2, bit_idx=FETCH_WHEELS_COLLISION_BIT, bit=1
@@ -286,7 +288,7 @@ class TableSceneBuilder(SceneBuilder):
             self.env.agent.robot.set_pose(
                 sapien.Pose([-0.725, 0, 0], q=euler2quat(0, 0, np.pi / 2))
             )
-        elif self.env.robot_uids in ["rj2506", "rj2506_panda_hand"]:
+        elif self.env.robot_uids in ["rj2506"]:
             qpos = np.array([0, 0, 0.27, 0.085, 0, 1.6, -1.6, -0.45, 0, 0]),
             if self.env._enhanced_determinism:
                 qpos = (
@@ -303,9 +305,12 @@ class TableSceneBuilder(SceneBuilder):
                     + qpos
                 )
             self.env.agent.reset(qpos)
-            self.env.agent.robot.set_pose(sapien.Pose([-0.9, 0, -self.table_height+0.25]))
-            # )
-            qpos = np.array([0, 0, 0.27, 0.085, 0, 1.6, -1.6, -0.45, 0, 0]),
+            self.env.agent.robot.set_pose(
+                sapien.Pose([-0.9, 0, -self.table_height+0.35]))
+            # self.env.agent.robot.set_pose(sapien.Pose([-0.6, 0, 0.25]))
+        elif self.env.robot_uids in ["rj2506_panda_hand"]:
+            qpos = np.array([0.21313176, 0.72851044, 2.4199743, 0.23680784,
+                            1.1492913, 0.12650724, -2.5196216, -1.4623401, 0.0, 0.0]),
             if self.env._enhanced_determinism:
                 qpos = (
                     self.env._batched_episode_rng[env_idx].normal(
@@ -321,5 +326,6 @@ class TableSceneBuilder(SceneBuilder):
                     + qpos
                 )
             self.env.agent.reset(qpos)
-            self.env.agent.robot.set_pose(sapien.Pose([-0.9, 0, -self.table_height+0.25]))
+            self.env.agent.robot.set_pose(
+                sapien.Pose([-0.9, 0, -self.table_height+0.35]))
             # self.env.agent.robot.set_pose(sapien.Pose([-0.6, 0, 0.25]))
