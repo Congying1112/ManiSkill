@@ -95,8 +95,8 @@
     <axis
       xyz="0 0 -1" />
     <limit
-      lower="-1.57"
-      upper="1.57"
+      lower="-3.14"
+      upper="3.14"
       effort="0"
       velocity="0" />
   </joint>
@@ -153,8 +153,8 @@
     <axis
       xyz="0 0 -1" />
     <limit
-      lower="0"
-      upper="0.75"
+      lower="-3.14"
+      upper="3.14"
       effort="0"
       velocity="0" />
   </joint>
@@ -402,8 +402,7 @@
       </geometry>
     </collision>
   </link>
-  <joint
-    name="left_arm_joint3"
+  <joint name="left_arm_joint3"
     type="revolute">
     <origin
       xyz="0.175 0.04945 -0.00028886"
@@ -415,13 +414,12 @@
     <axis
       xyz="1 0 0" />
     <limit
-      lower="0"
-      upper="1.57"
+      lower="-3.14"
+      upper="3.14"
       effort="0"
       velocity="0" />
   </joint>
-  <link
-    name="left_arm_link4">
+  <link name="left_arm_link4">
     <inertial>
       <origin
         xyz="0.0589278070413209 9.25924841574943E-05 -0.000134846182588293"
@@ -460,8 +458,7 @@
       </geometry>
     </collision>
   </link>
-  <joint
-    name="left_arm_joint4"
+  <joint name="left_arm_joint4"
     type="revolute">
     <origin
       xyz="0.050131 -0.1105 -0.00013589"
@@ -478,8 +475,8 @@
       effort="0"
       velocity="0" />
   </joint>
-  <link
-    name="left_hand_base">
+  
+  <link name="left_hand_base">
     <inertial>
       <origin
         xyz="0.0490104745154481 -0.000222931856034503 0.057095451975437"
@@ -518,8 +515,7 @@
       </geometry>
     </collision>
   </link>
-  <joint
-    name="left_arm_joint5"
+  <joint name="left_arm_joint5"
     type="revolute">
     <origin
       xyz="0.155 0.0013007 0.045864"

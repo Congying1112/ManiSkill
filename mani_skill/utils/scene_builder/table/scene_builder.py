@@ -289,7 +289,8 @@ class TableSceneBuilder(SceneBuilder):
                 sapien.Pose([-0.725, 0, 0], q=euler2quat(0, 0, np.pi / 2))
             )
         elif self.env.robot_uids in ["rj2506"]:
-            qpos = np.array([0, 0, 0.27, 0.085, 0, 1.6, -1.6, -0.45, 0, 0]),
+            # qpos = np.array([0, 0, 0.27, 0.085, 0, 1.6, -1.6, -0.45, 0, 0]),
+            qpos = np.array([0.5361564, -0.21362616, 1.3978533, 0.10586346, 0.5098696, -0.84706235, -2.4360652, -0.28417212, 0.0, 0.0]),
             if self.env._enhanced_determinism:
                 qpos = (
                     self.env._batched_episode_rng[env_idx].normal(
