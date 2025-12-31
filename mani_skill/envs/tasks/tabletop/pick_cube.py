@@ -14,6 +14,7 @@ from mani_skill.utils.building import actors
 from mani_skill.utils.registration import register_env
 from mani_skill.utils.scene_builder.table import TableSceneBuilder
 from mani_skill.utils.structs.pose import Pose
+from transforms3d.euler import euler2quat, quat2euler
 
 PICK_CUBE_DOC_STRING = """**Task Description:**
 A simple task where the objective is to grasp a red cube with the {robot_id} robot and move it to a target goal position. This is also the *baseline* task to test whether a robot with manipulation
@@ -194,6 +195,16 @@ class PickCubeEnv(BaseEnv):
 PickCubeEnv.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="Panda")
 
 
+quat2euler_for_2dtensor = lambda src : torch.tensor([quat2euler(q) for q in src])
+def normAngle(tensor):
+    """
+    将张量限制在[0, 2pi]区间
+    使用模运算实现，支持GPU计算
+    """
+    # 使用模运算将角度映射到[0, 2pi)区间
+    tensor_mod = torch.remainder(tensor, 2 * torch.pi)
+    # 将小于0的值加上2pi，映射到[0, 2pi]区间
+    return  torch.where(tensor_mod < 0, tensor_mod + 2 * torch.pi, tensor_mod)
 
 @register_env("PickCube-v2", max_episode_steps=50)
 class PickCubeV2(PickCubeEnv):
@@ -217,12 +228,17 @@ class PickCubeV2(PickCubeEnv):
         reward += place_reward * is_grasped
 
         # 新增夹爪姿态奖励
+        info["tcp_pose"] = self.agent.tcp_pose.raw_pose
+        info["tcp_pose_euler"] = quat2euler(self.agent.tcp_pose.q[0])
+        euler_angle = quat2euler_for_2dtensor(self.agent.tcp_pose.q)
+        euler_angle[:, 0] = normAngle(euler_angle[:, 0])
+        # info["tcp_pose_euler_tensor"] = euler_angle[:, :2]
         tcp_pose_error = torch.linalg.norm(
-            self.agent.tcp_pose.q - torch.tensor([0.0, 0.707, -0.707, 0.0], device=self.device), axis=1
+            euler_angle[:, :2] - torch.tensor([3.14, 0], device=self.device), axis=1
         )
         tcp_pose_reward = 1 - torch.tanh(5 * tcp_pose_error)
         reward += tcp_pose_reward
-        # info["tcp_pose_reward"] = tcp_pose_reward
+        info["tcp_pose_reward"] = tcp_pose_reward
 
         qvel = self.agent.robot.get_qvel()
         static_reward = 1 - torch.tanh(5 * torch.linalg.norm(qvel, axis=1))
