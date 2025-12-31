@@ -113,7 +113,7 @@ class PickCubeEnv(BaseEnv):
                 torch.rand((b, 2)) * self.cube_spawn_half_size * 2
                 - self.cube_spawn_half_size
             )
-            xyz[:, 0] += self.cube_spawn_center[0] - 0.4
+            xyz[:, 0] += self.cube_spawn_center[0]
             xyz[:, 1] += self.cube_spawn_center[1]
             xyz[:, 2] = self.cube_half_size
             qs = randomization.random_quaternions(b, lock_x=True, lock_y=True)
@@ -124,7 +124,7 @@ class PickCubeEnv(BaseEnv):
                 torch.rand((b, 2)) * self.cube_spawn_half_size * 2
                 - self.cube_spawn_half_size
             )
-            goal_xyz[:, 0] += self.cube_spawn_center[0] - 0.4
+            goal_xyz[:, 0] += self.cube_spawn_center[0]
             goal_xyz[:, 1] += self.cube_spawn_center[1]
             goal_xyz[:, 2] = torch.rand((b)) * self.max_goal_height + xyz[:, 2]
             self.goal_site.set_pose(Pose.create_from_pq(goal_xyz))
