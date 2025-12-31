@@ -196,6 +196,19 @@ PickCubeEnv.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="Panda")
 
 
 quat2euler_for_2dtensor = lambda src : torch.tensor([quat2euler(q) for q in src])
+
+def batch_quat2euler_tensor(quat_tensor):
+    """批量转换四元数Tensor到欧拉角Tensor"""
+    quat_np = quat_tensor.numpy()
+    
+    # 使用apply_along_axis进行批量处理
+    euler_np = np.apply_along_axis(
+        lambda q: quat2euler(q), 
+        axis=1, 
+        arr=quat_np
+    )
+    return torch.tensor(euler_np, dtype=quat_tensor.dtype)
+
 def normAngle(tensor):
     """
     将张量限制在[0, 2pi]区间
@@ -228,9 +241,7 @@ class PickCubeV2(PickCubeEnv):
         reward += place_reward * is_grasped
 
         # 新增夹爪姿态奖励
-        info["tcp_pose"] = self.agent.tcp_pose.raw_pose
-        info["tcp_pose_euler"] = quat2euler(self.agent.tcp_pose.q[0])
-        euler_angle = quat2euler_for_2dtensor(self.agent.tcp_pose.q)
+        euler_angle = batch_quat2euler_tensor(self.agent.tcp_pose.q)
         euler_angle[:, 0] = normAngle(euler_angle[:, 0])
         # info["tcp_pose_euler_tensor"] = euler_angle[:, :2]
         tcp_pose_error = torch.linalg.norm(
