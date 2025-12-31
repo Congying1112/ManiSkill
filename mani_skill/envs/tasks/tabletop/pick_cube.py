@@ -194,6 +194,46 @@ class PickCubeEnv(BaseEnv):
 PickCubeEnv.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="Panda")
 
 
+
+@register_env("PickCube-v2", max_episode_steps=50)
+class PickCubeV2(PickCubeEnv):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    
+    def compute_dense_reward(self, obs: Any, action: torch.Tensor, info: dict):
+        tcp_to_obj_dist = torch.linalg.norm(
+            self.cube.pose.p - self.agent.tcp_pose.p, axis=1
+        )
+        reaching_reward = 1 - torch.tanh(5 * tcp_to_obj_dist)
+        reward = reaching_reward
+
+        is_grasped = info["is_grasped"]
+        reward += is_grasped
+
+        obj_to_goal_dist = torch.linalg.norm(
+            self.goal_site.pose.p - self.cube.pose.p, axis=1
+        )
+        place_reward = 1 - torch.tanh(5 * obj_to_goal_dist)
+        reward += place_reward * is_grasped
+
+        # 新增夹爪姿态奖励
+        tcp_pose_error = torch.linalg.norm(
+            self.agent.tcp_pose.q - torch.tensor([0.0, 0.707, -0.707, 0.0], device=self.device), axis=1
+        )
+        tcp_pose_reward = 1 - torch.tanh(5 * tcp_pose_error)
+        reward += tcp_pose_reward
+        # info["tcp_pose_reward"] = tcp_pose_reward
+
+        qvel = self.agent.robot.get_qvel()
+        static_reward = 1 - torch.tanh(5 * torch.linalg.norm(qvel, axis=1))
+        reward += static_reward * info["is_obj_placed"]
+
+        reward[info["success"]] = 5
+        return reward
+
+PickCubeV2.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="rj2506")
+
+
 @register_env("PickCubeSO100-v1", max_episode_steps=50)
 class PickCubeSO100Env(PickCubeEnv):
     _sample_video_link = "https://github.com/haosulab/ManiSkill/raw/main/figures/environment_demos/PickCubeSO100-v1_rt.mp4"
