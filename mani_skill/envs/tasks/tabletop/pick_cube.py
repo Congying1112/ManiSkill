@@ -195,19 +195,82 @@ class PickCubeEnv(BaseEnv):
 PickCubeEnv.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="Panda")
 
 
-quat2euler_for_2dtensor = lambda src : torch.tensor([quat2euler(q) for q in src])
+def quat2euler_for_2dtensor(src): return torch.tensor(
+    [quat2euler(q) for q in src])
+
 
 def batch_quat2euler_tensor(quat_tensor):
     """批量转换四元数Tensor到欧拉角Tensor"""
     quat_np = quat_tensor.numpy()
-    
+
     # 使用apply_along_axis进行批量处理
     euler_np = np.apply_along_axis(
-        lambda q: quat2euler(q), 
-        axis=1, 
+        lambda q: quat2euler(q),
+        axis=1,
         arr=quat_np
     )
     return torch.tensor(euler_np, dtype=quat_tensor.dtype)
+
+
+def batch_quat2euler(q, order='xyz'):
+    """
+    将四元数转换为欧拉角的批量版本
+    支持 'xyz', 'zyx' 等常见顺序
+    参数：
+        q: (..., 4) 张量，[w, x, y, z] 格式
+        order: 欧拉角顺序
+    返回：
+        euler: (..., 3) 张量，欧拉角（弧度）
+    """
+    # 确保是 [w, x, y, z] 格式
+    if q.shape[-1] != 4:
+        raise ValueError(f"输入四元数形状应为 (..., 4)，但得到 {q.shape}")
+
+    # 提取分量
+    w, x, y, z = q[..., 0], q[..., 1], q[..., 2], q[..., 3]
+
+    if order == 'xyz':
+        # XYZ 顺序（常用于机器人学）
+        # roll (x-axis rotation)
+        sinr_cosp = 2 * (w * x + y * z)
+        cosr_cosp = 1 - 2 * (x * x + y * y)
+        roll = torch.atan2(sinr_cosp, cosr_cosp)
+
+        # pitch (y-axis rotation)
+        sinp = 2 * (w * y - z * x)
+        # 防止数值误差
+        sinp = torch.clamp(sinp, -1.0, 1.0)
+        pitch = torch.asin(sinp)
+
+        # yaw (z-axis rotation)
+        siny_cosp = 2 * (w * z + x * y)
+        cosy_cosp = 1 - 2 * (y * y + z * z)
+        yaw = torch.atan2(siny_cosp, cosy_cosp)
+
+        return torch.stack([roll, pitch, yaw], dim=-1)
+
+    elif order == 'zyx':
+        # ZYX 顺序（常用于航空航天）
+        # yaw (z-axis rotation)
+        siny_cosp = 2 * (w * z + x * y)
+        cosy_cosp = 1 - 2 * (y * y + z * z)
+        yaw = torch.atan2(siny_cosp, cosy_cosp)
+
+        # pitch (y-axis rotation)
+        sinp = 2 * (w * y - x * z)
+        sinp = torch.clamp(sinp, -1.0, 1.0)
+        pitch = torch.asin(sinp)
+
+        # roll (x-axis rotation)
+        sinr_cosp = 2 * (w * x + y * z)
+        cosr_cosp = 1 - 2 * (x * x + y * y)
+        roll = torch.atan2(sinr_cosp, cosr_cosp)
+
+        return torch.stack([yaw, pitch, roll], dim=-1)
+
+    else:
+        raise ValueError(f"不支持的欧拉角顺序: {order}")
+
 
 def normAngle(tensor):
     """
@@ -217,13 +280,14 @@ def normAngle(tensor):
     # 使用模运算将角度映射到[0, 2pi)区间
     tensor_mod = torch.remainder(tensor, 2 * torch.pi)
     # 将小于0的值加上2pi，映射到[0, 2pi]区间
-    return  torch.where(tensor_mod < 0, tensor_mod + 2 * torch.pi, tensor_mod)
+    return torch.where(tensor_mod < 0, tensor_mod + 2 * torch.pi, tensor_mod)
+
 
 @register_env("PickCube-v2", max_episode_steps=50)
 class PickCubeV2(PickCubeEnv):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-    
+
     def compute_dense_reward(self, obs: Any, action: torch.Tensor, info: dict):
         tcp_to_obj_dist = torch.linalg.norm(
             self.cube.pose.p - self.agent.tcp_pose.p, axis=1
@@ -241,7 +305,7 @@ class PickCubeV2(PickCubeEnv):
         reward += place_reward * is_grasped
 
         # 新增夹爪姿态奖励
-        euler_angle = batch_quat2euler_tensor(self.agent.tcp_pose.q)
+        euler_angle = batch_quat2euler(self.agent.tcp_pose.q)
         euler_angle[:, 0] = normAngle(euler_angle[:, 0])
         # info["tcp_pose_euler_tensor"] = euler_angle[:, :2]
         tcp_pose_error = torch.linalg.norm(
@@ -257,6 +321,7 @@ class PickCubeV2(PickCubeEnv):
 
         reward[info["success"]] = 5
         return reward
+
 
 PickCubeV2.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="rj2506")
 
@@ -279,6 +344,7 @@ class PickCubeWidowXAIEnv(PickCubeEnv):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, robot_uids="widowxai", **kwargs)
 
+
 PickCubeWidowXAIEnv.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="widowxai")
 
 
@@ -289,5 +355,5 @@ class PickCubeRJ2506Env(PickCubeEnv):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, robot_uids="rj2506", **kwargs)
 
-PickCubeRJ2506Env.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="rj2506")
 
+PickCubeRJ2506Env.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="rj2506")
