@@ -153,7 +153,7 @@
     <axis
       xyz="0 0 -1" />
     <limit
-      lower="0"
+      lower="-3.14"
       upper="3.14"
       effort="0"
       velocity="0" />
@@ -533,21 +533,33 @@
       velocity="0" />
   </joint>
   <!-- Define the hand_tcp frame -->
-  <link name="left_hand_tcp">
-    <visual>
+  <link name="left_hand_tcp" />
+    <!-- <visual>
         <geometry>
           <sphere radius="0.005"/>
         </geometry>
         <material name="red">
           <color rgba="1 0 0 1"/>
         </material>
-    </visual>
-  </link>
+    </visual> -->
+  <!-- </link> -->
   <joint name="left_hand_tcp_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0.047 0 0.215"/>
     <parent link="left_hand_base"/>
     <child link="left_hand_tcp"/>
   </joint>
+  <!-- <link name="left_hand_finger1_pad" />
+  <joint name="left_hand_finger1_pad_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.046 0.017 0.214"/>
+    <parent link="left_hand_finger1"/>
+    <child link="left_hand_finger1_pad"/>
+  </joint>
+  <link name="left_hand_finger2_pad"/>
+  <joint name="left_hand_finger2_pad_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.046 -0.017 0.214"/>
+    <parent link="left_hand_finger2"/>
+    <child link="left_hand_finger2_pad"/>
+  </joint> -->
   <link
     name="left_hand_finger1">
     <inertial>
@@ -588,9 +600,7 @@
       </geometry>
     </collision>
   </link>
-  <joint
-    name="left_hand_finger1_joint"
-    type="prismatic">
+  <joint name="left_hand_finger1_joint" type="prismatic">
     <origin
       xyz="0 0 0"
       rpy="0 0 0" />
@@ -606,8 +616,7 @@
       effort="0"
       velocity="0" />
   </joint>
-  <link
-    name="left_hand_finger2">
+  <link name="left_hand_finger2">
     <inertial>
       <origin
         xyz="0.0434939503377452 -0.0197407586191738 0.180370756229866"
@@ -646,9 +655,7 @@
       </geometry>
     </collision>
   </link>
-  <joint
-    name="left_hand_finger2_joint"
-    type="prismatic">
+  <joint name="left_hand_finger2_joint" type="prismatic">
     <origin
       xyz="0 0 0"
       rpy="0 0 0" />

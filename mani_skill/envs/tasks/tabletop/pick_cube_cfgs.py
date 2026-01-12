@@ -69,9 +69,9 @@ PICK_CUBE_CONFIGS = {
     },
     "rj2506": {
         "cube_half_size": 0.008,
-        "goal_thresh": 0.018 * 1.25,
-        "cube_spawn_half_size": 0.002,
-        "cube_spawn_center": (-0.25, 0),
+        "goal_thresh": 0.018,
+        "cube_spawn_half_size": 0.1,
+        "cube_spawn_center": (-0.45, 0),
         "max_goal_height": 0.2,
         "sensor_cam_eye_pos": [0.0, 0, 0.35],
         "sensor_cam_target_pos": [-0.2, 0, 0.1],

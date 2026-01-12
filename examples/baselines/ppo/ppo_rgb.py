@@ -14,6 +14,7 @@ import torch.optim as optim
 import tyro
 from torch.distributions.normal import Normal
 from torch.utils.tensorboard import SummaryWriter
+from torch.optim.lr_scheduler import OneCycleLR, CosineAnnealingWarmRestarts, StepLR, LinearLR, SequentialLR, ReduceLROnPlateau, CyclicLR, CosineAnnealingLR
 
 # ManiSkill specific imports
 import mani_skill.envs
@@ -60,6 +61,8 @@ class Args:
     """total timesteps of the experiments"""
     learning_rate: float = 3e-4
     """the learning rate of the optimizer"""
+    scheduler: str = "None"
+    """the scheduler for the optimizer"""
     num_envs: int = 512
     """the number of parallel environments"""
     num_eval_envs: int = 8
@@ -68,9 +71,9 @@ class Args:
     """whether to let parallel environments reset upon termination instead of truncation"""
     eval_partial_reset: bool = False
     """whether to let parallel evaluation environments reset upon termination instead of truncation"""
-    num_steps: int = 100
+    num_steps: int = 50
     """the number of steps to run in each environment per policy rollout"""
-    num_eval_steps: int = 100
+    num_eval_steps: int = 50
     """the number of steps to run in each evaluation environment during evaluation"""
     reconfiguration_freq: Optional[int] = None
     """how often to reconfigure the environment during training"""
@@ -323,7 +326,7 @@ if __name__ == "__main__":
     if args.capture_video:
         eval_output_dir = f"runs/{run_name}/videos"
         if args.evaluate:
-            eval_output_dir = f"{os.path.dirname(args.checkpoint)}/test_videos"
+            eval_output_dir = f"{os.path.dirname(args.checkpoint)}/../test_videos"
         print(f"Saving eval videos to {eval_output_dir}")
         if args.save_train_video_freq is not None:
             save_video_trigger = lambda x : (x // args.num_steps) % args.save_train_video_freq == 0
@@ -343,7 +346,7 @@ if __name__ == "__main__":
             config["env_cfg"] = dict(**env_kwargs, num_envs=args.num_envs, env_id=args.env_id, reward_mode="normalized_dense", env_horizon=max_episode_steps, partial_reset=args.partial_reset)
             config["eval_env_cfg"] = dict(**env_kwargs, num_envs=args.num_eval_envs, env_id=args.env_id, reward_mode="normalized_dense", env_horizon=max_episode_steps, partial_reset=args.partial_reset)
             wandb.init(
-                project=args.wandb_project_name+"-"+args.env_id,
+                project=args.wandb_project_name,
                 entity=args.wandb_entity,
                 sync_tensorboard=True,
                 config=config,
@@ -382,6 +385,51 @@ if __name__ == "__main__":
     agent = Agent(envs, sample_obs=next_obs).to(device)
     optimizer = optim.Adam(agent.parameters(), lr=args.learning_rate, eps=1e-5)
 
+    if args.scheduler == "StepLR":
+        print("Using StepLR scheduler")
+        scheduler = StepLR(optimizer, step_size=1000, gamma=0.1)
+    elif args.scheduler == "OneCycleLR":
+        print("Using OneCycleLR scheduler")
+        # OneCycleLR单周期策略：快速收敛、自动预热、大范围探索
+        scheduler = OneCycleLR(
+            optimizer, max_lr=args.learning_rate, total_steps=args.total_timesteps, pct_start=0.3, div_factor=25, final_div_factor=100
+        )
+    elif args.scheduler == "CosineAnnealingWarmRestarts":
+        print("Using CosineAnnealingWarmRestarts scheduler")
+        scheduler = CosineAnnealingWarmRestarts(
+            optimizer,
+            T_0=50,        # 初始重启周期
+            T_mult=2,      # 周期倍增
+            eta_min=1e-6,  # 最小学习率
+        )
+    elif args.scheduler == "LinearLR,CosineAnnealingLR":
+        print("Using Combined LinearLR and CosineAnnealingLR scheduler")
+        total_epochs = args.num_iterations  # 约195个iteration
+        warmup_epochs = max(10, int(0.05 * total_epochs))  # 预热5%的iteration
+        # warmup_epochs = 10
+        # total_epochs = 200
+        min_lr = 1e-6
+
+        scheduler1 = LinearLR(optimizer,
+                              start_factor=0.1,
+                              total_iters=warmup_epochs)
+        scheduler2 = CosineAnnealingLR(optimizer,
+                                       T_max=total_epochs - warmup_epochs,
+                                       eta_min=min_lr)
+
+        scheduler = SequentialLR(optimizer,
+                                 schedulers=[scheduler1, scheduler2],
+                                 milestones=[warmup_epochs])
+
+        scheduler = CosineAnnealingWarmRestarts(
+            optimizer,
+            T_0=50,        # 初始重启周期
+            T_mult=2,      # 周期倍增
+            eta_min=min_lr,  # 最小学习率
+        )
+    else:
+        pass
+
     if args.checkpoint:
         agent.load_state_dict(torch.load(args.checkpoint))
 
@@ -396,6 +444,7 @@ if __name__ == "__main__":
             stime = time.perf_counter()
             eval_obs, _ = eval_envs.reset()
             eval_metrics = defaultdict(list)
+            eval_reward = defaultdict(list)
             num_episodes = 0
             for _ in range(args.num_eval_steps):
                 with torch.no_grad():
@@ -405,12 +454,22 @@ if __name__ == "__main__":
                         num_episodes += mask.sum()
                         for k, v in eval_infos["final_info"]["episode"].items():
                             eval_metrics[k].append(v)
+                        if "reward" in eval_infos["final_info"]:
+                            for k, v in eval_infos["final_info"]["reward"].items():
+                                eval_reward[k].append(v)
+
             print(f"Evaluated {args.num_eval_steps * args.num_eval_envs} steps resulting in {num_episodes} episodes")
             for k, v in eval_metrics.items():
                 mean = torch.stack(v).float().mean()
                 if logger is not None:
                     logger.add_scalar(f"eval/{k}", mean, global_step)
                 print(f"eval_{k}_mean={mean}")
+
+            for k, v in eval_reward.items():
+                if logger is not None:
+                    logger.add_scalar(
+                        f"eval_rewards/{k}", torch.stack(v).float().mean(), global_step)
+            print("eval_rewards", eval_reward)
             if logger is not None:
                 eval_time = time.perf_counter() - stime
                 cumulative_times["eval_time"] += eval_time
@@ -418,7 +477,9 @@ if __name__ == "__main__":
             if args.evaluate:
                 break
         if args.save_model and iteration % args.eval_freq == 1:
-            model_path = f"runs/{run_name}/ckpt_{iteration}.pt"
+            if os.path.exists(f"runs/{run_name}/models") == False:
+                os.makedirs(f"runs/{run_name}/models")
+            model_path = f"runs/{run_name}/models/ckpt_{iteration}.pt"
             torch.save(agent.state_dict(), model_path)
             print(f"model saved to {model_path}")
         # Annealing the rate if instructed to do so.
@@ -449,6 +510,11 @@ if __name__ == "__main__":
                 done_mask = infos["_final_info"]
                 for k, v in final_info["episode"].items():
                     logger.add_scalar(f"train/{k}", v[done_mask].float().mean(), global_step)
+
+                if "reward" in infos["final_info"]:
+                    for k, v in infos["final_info"]["reward"].items():
+                        logger.add_scalar(
+                            f"train_rewards/{k}", v.float().mean(), global_step)
 
                 for k in infos["final_observation"]:
                     infos["final_observation"][k] = infos["final_observation"][k][done_mask]
@@ -589,7 +655,7 @@ if __name__ == "__main__":
             logger.add_scalar(f"time/total_{k}", v, global_step)
         logger.add_scalar("time/total_rollout+update_time", cumulative_times["rollout_time"] + cumulative_times["update_time"], global_step)
     if args.save_model and not args.evaluate:
-        model_path = f"runs/{run_name}/final_ckpt.pt"
+        model_path = f"runs/{run_name}/models/final_ckpt.pt"
         torch.save(agent.state_dict(), model_path)
         print(f"model saved to {model_path}")
 

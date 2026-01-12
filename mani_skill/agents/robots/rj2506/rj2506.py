@@ -169,8 +169,8 @@ class RJ2506(BaseAgent):
         )
         arm_pd_ee_pose = PDEEPoseControllerConfig(
             joint_names=self.arm_joint_names,
-            pos_lower=None,
-            pos_upper=None,
+            pos_lower=-2.0,
+            pos_upper=2.0,
             stiffness=self.arm_stiffness,
             damping=self.arm_damping,
             force_limit=self.arm_force_limit,
@@ -206,8 +206,8 @@ class RJ2506(BaseAgent):
         )
         arm_pd_joint_delta_pos_vel = PDJointPosVelControllerConfig(
             self.arm_joint_names,
-            -0.01,
-            0.04,
+            -0.1,
+            0.1,
             self.arm_stiffness,
             self.arm_damping,
             self.arm_force_limit,
@@ -223,7 +223,7 @@ class RJ2506(BaseAgent):
         gripper_pd_joint_pos = PDJointPosMimicControllerConfig(
             self.gripper_joint_names,
             lower=-0.01,  # a trick to have force when the object is thin
-            upper=0.1,
+            upper=0.04,
             stiffness=self.gripper_stiffness,
             damping=self.gripper_damping,
             force_limit=self.gripper_force_limit,
@@ -271,10 +271,10 @@ class RJ2506(BaseAgent):
             self.robot.get_links(), "left_hand_finger2"
         )
         # self.finger1pad_link = sapien_utils.get_obj_by_name(
-        #     self.robot.get_links(), "panda_leftfinger_pad"
+        #     self.robot.get_links(), "left_hand_finger1_pad"
         # )
         # self.finger2pad_link = sapien_utils.get_obj_by_name(
-        #     self.robot.get_links(), "panda_rightfinger_pad"
+        #     self.robot.get_links(), "left_hand_finger2_pad"
         # )
         self.tcp = sapien_utils.get_obj_by_name(
             self.robot.get_links(), self.ee_link_name

@@ -14,7 +14,6 @@ from mani_skill.utils.building import actors
 from mani_skill.utils.registration import register_env
 from mani_skill.utils.scene_builder.table import TableSceneBuilder
 from mani_skill.utils.structs.pose import Pose
-from transforms3d.euler import euler2quat, quat2euler
 
 PICK_CUBE_DOC_STRING = """**Task Description:**
 A simple task where the objective is to grasp a red cube with the {robot_id} robot and move it to a target goal position. This is also the *baseline* task to test whether a robot with manipulation
@@ -174,42 +173,25 @@ class PickCubeEnv(BaseEnv):
         )
         place_reward = 1 - torch.tanh(5 * obj_to_goal_dist)
         reward += place_reward * is_grasped
-
+        # reward += 0.5 * place_reward + 0.5 * place_reward * is_grasped # 修改1
         qvel = self.agent.robot.get_qvel()
-        if self.robot_uids in ["panda", "widowxai"]:
+        if self.robot_uids in ["panda", "widowxai", "rj2506", "rj2506_panda_hand"]:
             qvel = qvel[..., :-2]
         elif self.robot_uids == "so100":
             qvel = qvel[..., :-1]
         static_reward = 1 - torch.tanh(5 * torch.linalg.norm(qvel, axis=1))
         reward += static_reward * info["is_obj_placed"]
 
-        reward[info["success"]] = 5
+        reward[info["success"]] = 5  # 修改2
         return reward
 
     def compute_normalized_dense_reward(
         self, obs: Any, action: torch.Tensor, info: dict
     ):
-        return self.compute_dense_reward(obs=obs, action=action, info=info) / 5
+        return self.compute_dense_reward(obs=obs, action=action, info=info) / 5 # 修改3
 
 
 PickCubeEnv.__doc__ = PICK_CUBE_DOC_STRING.format(robot_id="Panda")
-
-
-def quat2euler_for_2dtensor(src): return torch.tensor(
-    [quat2euler(q) for q in src])
-
-
-def batch_quat2euler_tensor(quat_tensor):
-    """批量转换四元数Tensor到欧拉角Tensor"""
-    quat_np = quat_tensor.numpy()
-
-    # 使用apply_along_axis进行批量处理
-    euler_np = np.apply_along_axis(
-        lambda q: quat2euler(q),
-        axis=1,
-        arr=quat_np
-    )
-    return torch.tensor(euler_np, dtype=quat_tensor.dtype)
 
 
 def batch_quat2euler(q, order='xyz'):
@@ -283,10 +265,11 @@ def normAngle(tensor):
     return torch.where(tensor_mod < 0, tensor_mod + 2 * torch.pi, tensor_mod)
 
 
-@register_env("PickCube-v2", max_episode_steps=50)
+@register_env("PickCube-v2", max_episode_steps=100)
 class PickCubeV2(PickCubeEnv):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, *args, robot_uids="rj2506", robot_init_qpos_noise=0.02, **kwargs):
+        super().__init__(*args, robot_uids=robot_uids,
+                         robot_init_qpos_noise=robot_init_qpos_noise, **kwargs)
 
     def compute_dense_reward(self, obs: Any, action: torch.Tensor, info: dict):
         tcp_to_obj_dist = torch.linalg.norm(
