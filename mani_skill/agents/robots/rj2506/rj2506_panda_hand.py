@@ -16,7 +16,7 @@ from transforms3d.euler import euler2quat, quat2euler
 
 
 @register_agent()
-class RJ2506(BaseAgent):
+class RJ2506PandaHand(BaseAgent):
     uid = "rj2506_panda_hand"
     urdf_path = f"{PACKAGE_ASSET_DIR}/robots/RJ2506/urdf/RJ2506_leftarm_panda_hand.urdf"
     urdf_config = dict(
